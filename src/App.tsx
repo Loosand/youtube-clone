@@ -1,5 +1,7 @@
+import RouterPage from './router'
+
 function App() {
-	return <div>4234235</div>
+  return <RouterPage />
 }
 
 export default App
