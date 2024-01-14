@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { getToken, removeToken } from '@/utils/token'
 
 const request = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -7,6 +8,9 @@ const request = axios.create({
 
 request.interceptors.request.use(
   (config) => {
+    const token = getToken()
+    if (token) config.headers.Authorization = `Bearer ${token}`
+
     return config
   },
   (error) => {
@@ -15,13 +19,13 @@ request.interceptors.request.use(
 )
 
 request.interceptors.response.use(
-  (response) => {
+  (response: any) => {
     return response.data
   },
   (error) => {
     if (error.response && error.response.status === 401) {
-      // removeToken() // 删除 token
-      // window.location.reload() // 强制刷新
+      removeToken() // 删除 token
+      window.location.reload() // 强制刷新
     }
 
     return Promise.reject(error)
