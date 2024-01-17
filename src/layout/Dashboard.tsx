@@ -16,6 +16,7 @@ import {
   Container,
   AppBar as MuiAppBar,
   AppBarProps as MuiAppBarProps,
+  Button,
 } from '@mui/material'
 import {
   ChevronLeft as ChevronLeftIcon,
@@ -26,10 +27,11 @@ import {
 import { Outlet } from 'react-router-dom'
 // import FoldMenu from "./Menu"
 import FlatMenu from './FlatMenu'
-import Profile from './Profile'
-// import { useStore } from "@/store"
+import Profile from '../components/user/Profile'
+import { useStore } from '@/store'
 import { useNavigate } from 'react-router-dom'
 import Toast from '@/components/common/Toast'
+import DarkModeToggle from '@/components/common/DarkModeToggle'
 
 const drawerWidth = 240
 
@@ -81,17 +83,14 @@ const Drawer = styled(MuiDrawer, {
   },
 }))
 
-const defaultTheme = createTheme()
-
 export default function Dashboard() {
   const navigate = useNavigate()
 
   const [open, setOpen] = useState(true)
-  // 上传按钮
-  // const { setUploadState } = useStore()
+  const { setUploadState } = useStore()
 
   const handleUploadOpen = () => {
-    // setUploadState(true)
+    setUploadState(true)
     navigate('/upload')
   }
 
@@ -101,7 +100,7 @@ export default function Dashboard() {
   }
 
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <>
       <Toast />
 
       <Box className='flex'>
@@ -109,7 +108,7 @@ export default function Dashboard() {
 
         {/* AppBar */}
         <AppBar className='fixed' open={open}>
-          <Toolbar className='bg-red-500 pr-6'>
+          <Toolbar className='space-x-3 bg-red-500 pr-6 dark:bg-gray-800'>
             <IconButton
               color='inherit'
               aria-label='open drawer'
@@ -121,6 +120,7 @@ export default function Dashboard() {
               }}>
               <MenuIcon />
             </IconButton>
+
             <Typography
               className='flex-grow'
               variant='h5'
@@ -138,13 +138,18 @@ export default function Dashboard() {
                 <NotificationsIcon />
               </Badge>
             </IconButton>
+
+            <DarkModeToggle />
+
             <Profile />
           </Toolbar>
         </AppBar>
 
         {/* Sider */}
         <Drawer variant='permanent' open={open}>
-          <Toolbar className='flex items-center justify-end px-2'>
+          <Toolbar className='flex items-center justify-end px-2 dark:bg-gray-500'>
+            <DarkModeToggle />
+
             <IconButton onClick={toggleDrawer}>
               <ChevronLeftIcon />
             </IconButton>
@@ -156,19 +161,13 @@ export default function Dashboard() {
         {/* CONTENT */}
         <Box
           component='main'
-          className='h-screen flex-grow overflow-auto'
-          sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === 'light'
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
-          }}>
+          className='h-screen flex-grow overflow-auto dark:bg-gray-500'>
           <Toolbar />
           <Container maxWidth={'2xl' as Breakpoint} className='mb-8 mt-8'>
             <Outlet />
           </Container>
         </Box>
       </Box>
-    </ThemeProvider>
+    </>
   )
 }
