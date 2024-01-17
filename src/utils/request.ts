@@ -11,7 +11,11 @@ request.interceptors.request.use(
     const token = getToken()
     if (token) config.headers.Authorization = `Bearer ${token}`
 
-    return config
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(config)
+      }, 800)
+    })
   },
   (error) => {
     return Promise.reject(error)
