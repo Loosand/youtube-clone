@@ -1,7 +1,6 @@
-import { FormEvent, FormEventHandler, useState } from 'react'
+import { FormEvent, useState } from 'react'
 import {
   Avatar,
-  Button,
   CssBaseline,
   TextField,
   FormControlLabel,
@@ -12,34 +11,30 @@ import {
   Typography,
   Container,
 } from '@mui/material'
+import LoadingButton from '@mui/lab/LoadingButton'
 import { loginAPI } from '@/api/user'
 import { useNavigate } from 'react-router-dom'
 import { useStore } from '@/store'
-import Toast from '@/components/common/Toast'
-import useDebounce from '@/hooks/useDebonce'
 
 type Form = {
   email: string
   password: string
+  remember: boolean
 }
 
 export default function Login() {
+  const navigator = useNavigate()
   const { setToast } = useStore()
   const { setToken, email, password } = useStore()
 
-  const navigator = useNavigate()
-
+  const [loading, setLoading] = useState(false)
   const [form, setForm] = useState<Form>({
     email,
     password,
+    remember: false,
   })
-  const [remember, setRemember] = useState(true)
 
-  const handleRemember = () => {
-    setRemember(!remember)
-  }
-
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     setForm((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
@@ -48,21 +43,24 @@ export default function Login() {
 
   const handleSubmit = async (e: FormEvent, loginForm: Form) => {
     e.preventDefault()
+    setLoading(true)
 
     try {
       const res = await loginAPI(loginForm)
-      if (remember) setToken(res.data.token)
+      setLoading(false)
+
+      if (form.remember) setToken(res.data.token)
       setToast(res.message, 'success')
 
       navigator('/')
     } catch (error) {
+      setLoading(true)
       setToast(error.response.data.error, 'error')
     }
   }
 
   return (
     <Container component='main' maxWidth='xs'>
-      <Toast />
       <CssBaseline />
       <Box className='mt-10 flex flex-col items-center'>
         <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}></Avatar>
@@ -104,21 +102,30 @@ export default function Login() {
             control={
               <Checkbox
                 name='remember'
-                onChange={handleRemember}
-                checked={remember}
+                onChange={() => {
+                  handleChange({
+                    target: {
+                      name: 'remember',
+                      value: !form.remember,
+                    },
+                  })
+                }}
+                checked={form.remember}
                 aria-label='记住我'
                 color='primary'
               />
             }
             label='记住我'
           />
-          <Button
+          <LoadingButton
+            disabled={loading}
+            loading={loading}
             type='submit'
             fullWidth
-            variant='contained'
-            sx={{ mt: 3, mb: 2 }}>
+            sx={{ mt: 3, mb: 2 }}
+            variant='contained'>
             登录
-          </Button>
+          </LoadingButton>
           <Grid container>
             <Grid item xs>
               <Link href='#' paddingY={3} variant='body2'>
@@ -127,7 +134,7 @@ export default function Login() {
             </Grid>
             <Grid item>
               <Link href='register' paddingY={3} variant='body2'>
-                {'没有账号？点击注册'}
+                没有账号？点击注册
               </Link>
             </Grid>
           </Grid>

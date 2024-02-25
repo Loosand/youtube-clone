@@ -1,33 +1,33 @@
-import { useState, useEffect } from 'react'
+import { useQuery } from 'react-query'
 import { getRandomVideosAPI } from '@/api/video'
 import VideoList from '@/components/video/VideoList'
 import Loading from '@/components/common/Loading'
 import Empty from '@/components/common/Empty'
+import { useStore } from '@/store'
 
 export default function MyChannelVideo() {
-  const [videoList, setVideoList] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [empty, setEmpty] = useState(false)
+  const { setToast } = useStore()
 
-  // 视频列表请求
-  useEffect(() => {
-    getRandomVideosAPI()
-      .then((res) => {
-        setVideoList(res.data)
-        setLoading(false)
-        setEmpty(res.data.length === 0)
-      })
-      .catch((error) => {
-        console.error(error)
-      })
-  }, [])
+  const { data: videoList, isLoading } = useQuery(
+    'home-videos',
+    async () => {
+      const res = await getRandomVideosAPI()
+      return res
+    },
+    {
+      keepPreviousData: true,
+      onSuccess: (res) => {
+        setToast(res.message, 'success')
+      },
+    },
+  )
 
   return (
     <>
-      <VideoList videos={videoList} />
+      <VideoList videos={videoList?.data} />
 
-      {empty && <Empty>暂无推荐视频</Empty>}
-      {loading && <Loading />}
+      {Boolean(videoList?.data.length === 0) && <Empty>暂无推荐视频</Empty>}
+      {isLoading && <Loading />}
     </>
   )
 }

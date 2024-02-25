@@ -1,10 +1,10 @@
 import VideoCard from '@/components/video/VideoCard'
-import { Grid, Typography } from '@mui/material'
+import { Grid } from '@mui/material'
 
-export default function VideoList({ videos }) {
+export default function VideoList({ videos }: { videos: any }) {
   return (
     <Grid container spacing={3}>
-      {videos.map((item) => (
+      {videos?.map((item: any) => (
         <VideoCard
           img={item.cover}
           key={item._id}

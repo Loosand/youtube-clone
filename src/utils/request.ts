@@ -1,5 +1,11 @@
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { getToken, removeToken } from '@/utils/token'
+
+export interface ResponseData<T = any> {
+  code: number
+  message: string
+  data: T
+}
 
 const request = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -17,16 +23,16 @@ request.interceptors.request.use(
       }, 800)
     })
   },
-  (error) => {
+  (error: AxiosError) => {
     return Promise.reject(error)
   },
 )
 
 request.interceptors.response.use(
-  (response: any) => {
+  (response) => {
     return response.data
   },
-  (error) => {
+  (error: AxiosError) => {
     if (error.response && error.response.status === 401) {
       removeToken() // 删除 token
       window.location.reload() // 强制刷新

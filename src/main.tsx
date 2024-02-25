@@ -1,11 +1,14 @@
-import React from 'react'
 import ReactDOM from 'react-dom/client'
+import { QueryClientProvider, QueryClient } from 'react-query'
 import './index.css'
-import { RouterProvider } from 'react-router-dom'
 import App from './App.tsx'
+import Toast from './components/common/Toast.tsx'
+
+const queryClient = new QueryClient()
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
+  <QueryClientProvider client={queryClient}>
+    <Toast />
     <App />
-  </React.StrictMode>,
+  </QueryClientProvider>,
 )

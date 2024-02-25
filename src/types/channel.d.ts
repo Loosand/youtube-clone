@@ -1,4 +1,4 @@
-export interface ChannelRes {
+export type ChannelRes = {
   _id: string
   username: string
   email: string

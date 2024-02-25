@@ -1,7 +1,7 @@
 import { type User } from './user'
 import { User } from '../models/user'
 
-export interface VideoRes {
+export type VideoRes = {
   _id: string
   title: string
   description: string
@@ -18,7 +18,7 @@ export interface VideoRes {
   user: User
 }
 
-export interface CreateVideoRes {
+export type CreateVideoRes = {
   _id: string
   title: string
   description: string
@@ -31,7 +31,7 @@ export interface CreateVideoRes {
   user: string
 }
 
-export interface VideoListRes {
+export type VideoListRes = {
   videos: VideoRes[]
   videosCount: number
 }

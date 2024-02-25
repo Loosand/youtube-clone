@@ -1,4 +1,4 @@
-export interface User {
+export type User = {
   _id: string
   username: string
   email: string
@@ -8,7 +8,7 @@ export interface User {
   channelDescription: string
 }
 
-export interface LoginRes {
+export type LoginRes = {
   username: string
   email: string
   avatar: string
@@ -16,12 +16,12 @@ export interface LoginRes {
   token: string
 }
 
-export interface RegisterRes extends LoginRes {}
+export type RegisterRes = LoginRes
 
-export interface ProfileRes extends LoginRes {
+export type ProfileRes = LoginRes & {
   id: string
   password: string
   subscribersCount: number
 }
 
-export interface UpdateProfileRes extends LoginRes {}
+export type UpdateProfileRes = LoginRes
