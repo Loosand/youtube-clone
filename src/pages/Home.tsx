@@ -8,26 +8,31 @@ import { useStore } from '@/store'
 export default function MyChannelVideo() {
   const { setToast } = useStore()
 
-  const { data: videoList, isLoading } = useQuery(
+  const {
+    data: videoList,
+    isLoading,
+    isFetching,
+  } = useQuery(
     'home-videos',
     async () => {
       const res = await getRandomVideosAPI()
-      return res
+      return res.data
     },
     {
       keepPreviousData: true,
-      onSuccess: (res) => {
-        setToast(res.message, 'success')
+      onError: (error) => {
+        setToast(error, 'error')
       },
     },
   )
 
-  return (
-    <>
-      <VideoList videos={videoList?.data} />
+  if (isLoading) {
+    return <Loading />
+  }
 
-      {Boolean(videoList?.data.length === 0) && <Empty>暂无推荐视频</Empty>}
-      {isLoading && <Loading />}
-    </>
-  )
+  if (videoList?.length === 0) {
+    return <Empty>暂无推荐视频</Empty>
+  }
+
+  return <VideoList loading={isFetching || isLoading} videos={videoList} />
 }

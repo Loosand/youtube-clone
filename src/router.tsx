@@ -10,10 +10,6 @@ import UploadDialog from '@/pages/UploadDialog'
 import VideoPage from './pages/VideoPage'
 import SubVideo from './pages/SubVideo'
 import SubChannel from './pages/SubChannel'
-import MyChannel from './pages/MyChannel'
-import MyChannelHome from './pages/MyChannelHome'
-import MyChannelVideo from './pages/MyChannelVideo'
-import MyChannelDynamic from './pages/MyChannelDynamic'
 import Channel from './pages/Channel'
 import ChannelHome from './pages/ChannelHome'
 import ChannelVideo from './pages/ChannelVideo'
@@ -30,12 +26,6 @@ export default function Router() {
             </Guard>
           }>
           <Route index element={<Home />} />
-
-          <Route path='home' element={<MyChannel />}>
-            <Route index element={<MyChannelHome />} />
-            <Route path='video' element={<MyChannelVideo />} />
-            <Route path='dynamic' element={<MyChannelDynamic />} />
-          </Route>
 
           <Route path=':userId' element={<Channel />}>
             <Route index element={<ChannelHome />} />

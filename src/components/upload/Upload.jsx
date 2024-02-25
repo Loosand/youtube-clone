@@ -11,12 +11,12 @@ import { createVideoAPI } from '@/api/video'
 import { createUploadVideoAPI, refreshUploadVideoAPI } from '@/api/vod'
 
 export default function Upload() {
-  const [isLoading, setIsLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [submitResult, setSubmitResult] = useState('开始上传')
   const [submitSuccess, setSubmitSuccess] = useState(false)
   const { selectedFile } = useStore()
   const videoURL = useCallback(URL.createObjectURL(selectedFile), [])
-  // 表单
+
   const [form, setForm] = useState({
     title: selectedFile?.name,
     description: '',
@@ -31,7 +31,6 @@ export default function Upload() {
     }))
   }
 
-  // 视频创建
   const createUploader = () => {
     const uploader = new window.AliyunUpload.Vod({
       // userID，必填，您可以使用阿里云账号访问账号中心（https://account.console.aliyun.com/），即可查看账号ID
@@ -47,7 +46,7 @@ export default function Upload() {
       enableUploadProgress: true,
       // 开始上传
       onUploadstarted: async function (uploadInfo) {
-        setIsLoading(true)
+        setLoading(true)
         console.log('onUpload-----', uploadInfo)
         if (uploadInfo.videoId) {
           const data = await refreshUploadVideoAPI(uploadInfo.videoId)
@@ -74,7 +73,7 @@ export default function Upload() {
       onUploadSucceed: async function (uploadInfo) {
         setSubmitResult('上传成功！')
         setSubmitSuccess(true)
-        setIsLoading(false)
+        setLoading(false)
         console.log('onUploadSuccess', uploadInfo)
         form.vodVideoId = uploadInfo.videoId
         const data = await createVideoAPI(form)
@@ -83,7 +82,7 @@ export default function Upload() {
       // 文件上传失败
       onUploadFailed: function (uploadInfo, code, message) {
         setSubmitResult('上传失败！')
-        setIsLoading(false)
+        setLoading(false)
         console.log('onUploadFailed: ', uploadInfo, code, message)
       },
       // 文件上传进度，单位：字节
@@ -101,7 +100,7 @@ export default function Upload() {
       // 全部文件上传结束
       onUploadEnd: function (uploadInfo) {
         setSubmitResult('上传成功！')
-        setIsLoading(false)
+        setLoading(false)
         console.log('onUploadEnd:', uploadInfo)
       },
     })
@@ -109,7 +108,6 @@ export default function Upload() {
     return uploader
   }
 
-  // 表单提交
   const handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -175,10 +173,10 @@ export default function Upload() {
         </Box>
       </Box>
       <LoadingButton
-        disabled={isLoading || submitSuccess}
+        disabled={loading || submitSuccess}
         startIcon={<FileUploadIcon />}
         onClick={handleSubmit}
-        loading={isLoading}
+        loading={loading}
         variant='contained'
         color={submitResult === '上传成功！' ? 'success' : 'primary'}>
         {submitResult}

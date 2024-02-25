@@ -28,7 +28,7 @@ export function registerAPI(data: {
   })
 }
 
-// 获取用户信息
+// 获取我的信息
 export function getProfileAPI() {
   return request<ProfileRes>({
     url: '/user',

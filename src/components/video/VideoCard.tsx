@@ -1,16 +1,27 @@
-import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
-import CardMedia from '@mui/material/CardMedia'
-import Typography from '@mui/material/Typography'
-import { CardActionArea, Box } from '@mui/material'
+import {
+  Card,
+  CardContent,
+  CardActionArea,
+  CardMedia,
+  Grid,
+  Skeleton,
+  Typography,
+  Box,
+} from '@mui/material'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { Grid } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-
 import 'dayjs/locale/zh-cn'
 
-export default function VideoCard({ id, img, title, desc, auth, date }) {
+export default function VideoCard({
+  loading,
+  id,
+  img,
+  title,
+  desc,
+  auth,
+  date,
+}) {
   const navigate = useNavigate()
   dayjs.extend(relativeTime)
 
@@ -43,33 +54,79 @@ export default function VideoCard({ id, img, title, desc, auth, date }) {
           borderRadius: 2,
         }}>
         <CardActionArea>
-          <CardMedia
-            component='img'
-            className='h-48 w-80'
-            image={img}
-            alt='green iguana'
-          />
+          {loading ? (
+            <Skeleton
+              sx={{ height: 140 }}
+              animation='wave'
+              variant='rectangular'
+            />
+          ) : (
+            <CardMedia
+              component='img'
+              className='h-48 w-80'
+              image={img}
+              alt='green iguana'
+            />
+          )}
+
           <CardContent>
-            <Typography
-              gutterBottom
-              fontWeight={'semibold'}
-              variant='h6'
-              component='h6'>
-              {title}
-            </Typography>
+            {loading ? (
+              <Skeleton
+                animation='wave'
+                height={10}
+                width='100%'
+                style={{ marginBottom: 6 }}
+              />
+            ) : (
+              <Typography
+                gutterBottom
+                fontWeight={'semibold'}
+                variant='h6'
+                component='h6'>
+                {title}
+              </Typography>
+            )}
 
             <Box className='flex justify-between'>
-              <Typography gutterBottom component='span'>
-                {auth}
-              </Typography>
-              <Typography gutterBottom component='span'>
-                {formatTimeDifference(date)}
-              </Typography>
+              {loading ? (
+                <Skeleton
+                  animation='wave'
+                  height={10}
+                  width='15%'
+                  style={{ marginBottom: 6 }}
+                />
+              ) : (
+                <Typography gutterBottom component='span'>
+                  {auth}
+                </Typography>
+              )}
+
+              {loading ? (
+                <Skeleton
+                  animation='wave'
+                  height={10}
+                  width='15%'
+                  style={{ marginBottom: 6 }}
+                />
+              ) : (
+                <Typography gutterBottom component='span'>
+                  {formatTimeDifference(date)}
+                </Typography>
+              )}
             </Box>
 
-            <Typography variant='body2' color='text.secondary'>
-              {desc}
-            </Typography>
+            {loading ? (
+              <Skeleton
+                animation='wave'
+                height={10}
+                width='100%'
+                style={{ marginBottom: 6 }}
+              />
+            ) : (
+              <Typography variant='body2' color='text.secondary'>
+                {desc}
+              </Typography>
+            )}
           </CardContent>
         </CardActionArea>
       </Card>

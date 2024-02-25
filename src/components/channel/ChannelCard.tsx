@@ -5,6 +5,7 @@ import {
   Card,
   CardContent,
   Typography,
+  Skeleton,
 } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 
@@ -15,18 +16,16 @@ import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import { useState } from 'react'
 
-const ChannelCard = ({
-  avatar = '/avatar.png',
-  username = '匿名',
-  channelDescription = '这个用户什么也没留下',
+export default function ChannelCard({
+  loading,
+  user,
   isSubscribed = true,
   onUnSubscribeClick,
   onSubscribeClick,
-  id,
-}) => {
+}) {
   const navigate = useNavigate()
   const handleGoVideoDetail = () => {
-    navigate(`/${id}`)
+    navigate(`/${user._id}`)
   }
 
   const [open, setOpen] = useState(false)
@@ -66,20 +65,49 @@ const ChannelCard = ({
         onClick={handleGoVideoDetail}>
         <CardContent className='flex items-center justify-between'>
           <Box className='flex shrink items-center gap-4'>
-            <Avatar alt={username} src={avatar} />
+            {loading ? (
+              <Skeleton
+                animation='wave'
+                variant='circular'
+                width={40}
+                height={40}
+              />
+            ) : (
+              <Avatar alt={user.username} src={user.avatar} />
+            )}
             <Box className='w-48'>
-              <Typography
-                className='overflow-hidden text-ellipsis whitespace-nowrap'
-                variant='h5'>
-                {username}
-              </Typography>
-              <Typography
-                className='overflow-hidden text-ellipsis whitespace-nowrap'
-                variant='body2'>
-                {channelDescription}
-              </Typography>
+              {loading ? (
+                <Skeleton
+                  animation='wave'
+                  height={10}
+                  width='60%'
+                  style={{ marginBottom: 6 }}
+                />
+              ) : (
+                <Typography
+                  className='overflow-hidden text-ellipsis whitespace-nowrap'
+                  variant='h5'>
+                  {user.username}
+                </Typography>
+              )}
+
+              {loading ? (
+                <Skeleton
+                  animation='wave'
+                  height={10}
+                  width='100%'
+                  style={{ marginBottom: 6 }}
+                />
+              ) : (
+                <Typography
+                  className='overflow-hidden text-ellipsis whitespace-nowrap'
+                  variant='body2'>
+                  {user.channelDescription || '这个用户什么也没有留下'}
+                </Typography>
+              )}
             </Box>
           </Box>
+
           <Button
             className='whitespace-nowrap'
             variant={isSubscribed ? 'outlined' : 'contained'}
@@ -105,5 +133,3 @@ const ChannelCard = ({
     </Box>
   )
 }
-
-export default ChannelCard

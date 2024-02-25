@@ -1,14 +1,10 @@
 import CircularProgress from '@mui/material/CircularProgress'
 
-const Loading = () => {
+const Loading = ({ height }: { height?: string }) => {
   return (
     <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '65vh',
-      }}>
+      style={{ height: height ? height : '65vh' }}
+      className='flex items-center justify-center'>
       <CircularProgress />
     </div>
   )

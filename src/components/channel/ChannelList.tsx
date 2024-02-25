@@ -3,6 +3,7 @@ import { Box } from '@mui/material'
 import { type ChannelRes } from '@/types/channel'
 
 type ChannelListProps = {
+  loading?: boolean
   subList: ChannelRes[]
   subscriptionStatus: boolean
   onUnSubscribeClick: (channelId: string) => void
@@ -10,6 +11,7 @@ type ChannelListProps = {
 }
 
 export default function ChannelList({
+  loading = false,
   subList,
   subscriptionStatus,
   onUnSubscribeClick,
@@ -20,14 +22,12 @@ export default function ChannelList({
       {subList?.map((item) => {
         return (
           <ChannelCard
-            id={item._id}
-            avatar={item.avatar}
-            username={item.username}
-            channelDescription={item.channelDescription}
+            loading={loading}
+            user={item}
             isSubscribed={subscriptionStatus[item._id]}
             key={item._id}
-            onUnSubscribeClick={onUnSubscribeClick}
-            onSubscribeClick={onSubscribeClick}
+            onUnSubscribeClick={() => onUnSubscribeClick(item._id)}
+            onSubscribeClick={() => onSubscribeClick(item._id)}
           />
         )
       })}

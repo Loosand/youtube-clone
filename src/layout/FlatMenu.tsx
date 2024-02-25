@@ -16,60 +16,45 @@ import {
 } from '@mui/icons-material'
 import { useLocation } from 'react-router-dom'
 import { Link } from 'react-router-dom'
-
-const MENU = [
-  {
-    text: '首页',
-    path: '/',
-    icon: <HomeIcon />,
-    last: false,
-  },
-  {
-    text: '订阅内容',
-    path: 'subvideo',
-    icon: <VideoLibraryIcon />,
-    last: false,
-  },
-  {
-    title: '我的',
-    text: '关注的频道',
-    path: 'subchannel',
-    icon: <SubscriptionsIcon />,
-    last: true,
-  },
-  {
-    text: '你的频道',
-    path: 'home',
-    icon: <LocalMoviesIcon />,
-    last: true,
-  },
-  // {
-  // 	text: "你的视频",
-  // 	path: "home/video",
-  // 	icon: <VideoCameraFrontIcon />,
-  // 	last: false,
-  // },
-  // {
-  // 	text: "你的评论",
-  // 	path: "comment",
-  // 	icon: <ModeCommentIcon />,
-  // 	last: true,
-  // },
-  {
-    text: '个人信息',
-    path: 'userinfo',
-    icon: <AccountCircleIcon />,
-    last: false,
-  },
-  // {
-  // 	text: "Charts",
-  // 	path: "charts",
-  // 	icon: <TableChartIcon />,
-  // 	last: false,
-  // },
-]
+import { useStore } from '@/store'
 
 export default function FlatMenu({ menuOpen }) {
+  const { userId } = useStore()
+
+  const MENU = [
+    {
+      text: '首页',
+      path: '/',
+      icon: <HomeIcon />,
+      last: false,
+    },
+    {
+      text: '订阅内容',
+      path: 'subvideo',
+      icon: <VideoLibraryIcon />,
+      last: false,
+    },
+    {
+      title: '我的',
+      text: '关注的频道',
+      path: 'subchannel',
+      icon: <SubscriptionsIcon />,
+      last: true,
+    },
+    {
+      text: '你的频道',
+      path: userId,
+      icon: <LocalMoviesIcon />,
+      last: true,
+    },
+    {
+      text: '个人信息',
+      path: 'userinfo',
+      icon: <AccountCircleIcon />,
+      last: false,
+    },
+  ]
+
   const location = useLocation()
   const currentRoute =
     location.pathname === '/' ? '/' : location.pathname.slice(1)
@@ -100,11 +85,20 @@ function ItemMenu({ last, item, currentRoute, menuOpen }) {
     },
   }
 
+  const sanitizedCurrentRoute = currentRoute.replace(/^\//, '')
+  const sanitizedItemPath = item.path?.replace(/^\//, '')
+
+  let curRoute = false
+  if (sanitizedCurrentRoute === '') {
+    curRoute = sanitizedItemPath === ''
+  } else {
+    curRoute = sanitizedCurrentRoute.split('/').includes(sanitizedItemPath)
+  }
   return (
     <Link to={item.path}>
       <ListItemButton
         sx={{
-          ...(currentRoute === item.path && styles.selected),
+          ...(curRoute && styles.selected),
         }}>
         <ListItemIcon className='-mr-6 dark:text-white'>
           {item.icon}

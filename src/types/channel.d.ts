@@ -7,4 +7,5 @@ export type ChannelRes = {
   channelDescription: string
   subscribersCount: number
   isSubscribed: boolean
+  videosCount: number
 }

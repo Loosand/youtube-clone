@@ -1,36 +1,39 @@
 import ChannelList from '@/components/channel/ChannelList'
-import { type ChannelRes } from '@/types/channel'
 import { getSubChannelsAPI, unsubscribeAPI, subscribeAPI } from '@/api/channel'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useStore } from '@/store'
 import Loading from '@/components/common/Loading'
 import Empty from '@/components/common/Empty'
+import { useQuery } from 'react-query'
 
 export default function SubChannel() {
   const { userId } = useStore()
-  const [loading, setLoading] = useState(true)
-  const [empty, setEmpty] = useState(false)
-  const [subList, setSubList] = useState<ChannelRes[]>()
   const [subscriptionStatus, setSubscriptionStatus] = useState<any>({})
 
-  useEffect(() => {
-    if (userId) {
-      getSubChannelsAPI(userId).then((res) => {
-        setSubList(res.data)
-        setLoading(false)
+  const {
+    data: subList,
+    isLoading,
+    isFetching,
+  } = useQuery(
+    ['sub-channel', userId],
+    async () => {
+      const res = await getSubChannelsAPI(userId)
 
-        setEmpty(res.data.length === 0)
+      const initialSubscriptionStatus = {}
 
-        const initialSubscriptionStatus = {}
-
-        subList?.map((item) => {
-          initialSubscriptionStatus[item._id] = true
-        })
-
-        setSubscriptionStatus(initialSubscriptionStatus)
+      subList?.map((item) => {
+        initialSubscriptionStatus[item._id] = true
       })
-    }
-  }, [userId])
+
+      setSubscriptionStatus(initialSubscriptionStatus)
+
+      return res.data
+    },
+    {
+      keepPreviousData: true,
+      enabled: !!userId,
+    },
+  )
 
   const handleUnSubscribeClick = (channelId: string) => {
     if (userId) {
@@ -54,17 +57,21 @@ export default function SubChannel() {
     }
   }
 
-  return (
-    <>
-      <ChannelList
-        subList={subList}
-        subscriptionStatus={subscriptionStatus}
-        onUnSubscribeClick={handleUnSubscribeClick}
-        onSubscribeClick={handleSubscribeClick}
-      />
+  if (isLoading) {
+    return <Loading />
+  }
 
-      {empty && <Empty>暂无关注的频道</Empty>}
-      {loading && <Loading />}
-    </>
+  if (subList?.length === 0) {
+    return <Empty>暂无关注的频道</Empty>
+  }
+
+  return (
+    <ChannelList
+      loading={isLoading || isFetching}
+      subList={subList}
+      subscriptionStatus={subscriptionStatus}
+      onUnSubscribeClick={handleUnSubscribeClick}
+      onSubscribeClick={handleSubscribeClick}
+    />
   )
 }
