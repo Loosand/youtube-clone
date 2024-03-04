@@ -1,10 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import {
-  styled,
-  createTheme,
-  ThemeProvider,
-  Breakpoint,
-} from '@mui/material/styles'
+import { useState } from 'react'
+import { styled, Breakpoint } from '@mui/material/styles'
 import {
   CssBaseline,
   Drawer as MuiDrawer,
@@ -16,7 +11,6 @@ import {
   Container,
   AppBar as MuiAppBar,
   AppBarProps as MuiAppBarProps,
-  Button,
 } from '@mui/material'
 import {
   ChevronLeft as ChevronLeftIcon,

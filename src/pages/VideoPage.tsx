@@ -1,7 +1,7 @@
 import { getVideoAPI } from '@/api/video'
 import { getVideoPlayAuthAPI } from '@/api/vod'
 import { useState, useEffect } from 'react'
-import { Box, Button, Container, Grid, Paper } from '@mui/material'
+import { Button, Grid, Paper } from '@mui/material'
 import { useParams } from 'react-router-dom'
 
 declare global {
@@ -12,7 +12,7 @@ declare global {
 
 export default function VideoPage() {
   const [video, setVideo] = useState(null)
-  const [playerData, setPlayerData] = useState(null)
+  // const [playerData, setPlayerData] = useState(null)
   const { videoId } = useParams()
 
   // 获取视频列表
