@@ -8,12 +8,18 @@ import {
 } from '@mui/icons-material'
 import { useStore } from '@/store'
 import { createVideoAPI } from '@/api/video'
-import { createUploadVideoAPI, refreshUploadVideoAPI } from '@/api/vod'
+import {
+  createUploadVideoAPI,
+  refreshUploadVideoAPI,
+  uploadPicAPI,
+} from '@/api/vod'
 
 export default function Upload() {
   const [loading, setLoading] = useState(false)
   const [submitResult, setSubmitResult] = useState('开始上传')
   const [submitSuccess, setSubmitSuccess] = useState(false)
+  const [cover, setCover] = useState()
+  const [coverUrl, setCoverUrl] = useState()
   const { selectedFile } = useStore()
   const videoURL = useCallback(URL.createObjectURL(selectedFile), [])
 
@@ -21,7 +27,6 @@ export default function Upload() {
     title: selectedFile?.name,
     description: '',
     vodVideoId: '',
-    cover: '123',
   })
 
   const handleChange = (e) => {
@@ -29,6 +34,11 @@ export default function Upload() {
       ...prev,
       [e.target.name]: e.target.value,
     }))
+  }
+
+  const handleCoverChange = async (e) => {
+    const file = await e.target.files[0]
+    setCover(file)
   }
 
   const createUploader = () => {
@@ -76,6 +86,7 @@ export default function Upload() {
         setLoading(false)
         console.log('onUploadSuccess', uploadInfo)
         form.vodVideoId = uploadInfo.videoId
+        form.cover = coverUrl
         const data = await createVideoAPI(form)
         console.log('保存成功', data)
       },
@@ -106,6 +117,23 @@ export default function Upload() {
     })
 
     return uploader
+  }
+
+  const uploadCover = () => {
+    if (cover) {
+      const formData = new FormData()
+      formData.append('file', cover)
+
+      uploadPicAPI(formData).then((res) => {
+        setCoverUrl(res.data)
+      })
+    }
+  }
+
+  const handleUploadPic = () => {
+    if (cover) {
+      uploadCover()
+    }
   }
 
   const handleSubmit = async (e) => {
@@ -151,17 +179,22 @@ export default function Upload() {
                 placeholder='向观看者介绍你的视频'
               />
               <Box>
-                <label htmlFor='contained-button-file'>
-                  <Input
-                    accept='image/*'
-                    id='contained-button-file'
-                    onChange={handleChange}
-                    name='cover'
-                    type='file'
-                  />
+                <Input
+                  accept='image/*'
+                  id='contained-button-file'
+                  onChange={handleCoverChange}
+                  name='cover'
+                  type='file'
+                />
+
+                <label
+                  className='flex items-center gap-4'
+                  htmlFor='contained-button-file'>
+                  <img className='w-64' src={coverUrl} alt='' />
                   <Button
                     startIcon={<ImageIcon />}
                     variant='contained'
+                    onClick={handleUploadPic}
                     component='span'>
                     上传封面
                   </Button>
@@ -172,6 +205,7 @@ export default function Upload() {
           <Box>{selectedFile && <VideoInterview videoURL={videoURL} />}</Box>
         </Box>
       </Box>
+
       <LoadingButton
         disabled={loading || submitSuccess}
         startIcon={<FileUploadIcon />}
