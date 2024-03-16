@@ -1,3 +1,4 @@
+import { NotificationsNone as NotificationsNoneIcon } from '@mui/icons-material'
 import {
   Avatar,
   Typography,
@@ -6,9 +7,24 @@ import {
   Box,
   Skeleton,
 } from '@mui/material'
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
 
-export default function ProfileCard({ loading, user, isMine }) {
+import { Channel } from '@/types/user'
+
+type ProfileCardProps = {
+  loading: boolean
+  user: Channel
+  isSubscribed: boolean
+  isMine: boolean
+  onSubscribeClick: () => void
+}
+
+export default function ProfileCard({
+  loading,
+  user,
+  isSubscribed,
+  isMine,
+  onSubscribeClick,
+}: ProfileCardProps) {
   return (
     <>
       <CardMedia
@@ -66,8 +82,9 @@ export default function ProfileCard({ loading, user, isMine }) {
 
           {!isMine && (
             <>
-              {user.sub ? (
+              {isSubscribed ? (
                 <Button
+                  onClick={onSubscribeClick}
                   sx={{
                     mt: 2,
                     borderRadius: 4,
@@ -80,6 +97,7 @@ export default function ProfileCard({ loading, user, isMine }) {
                 </Button>
               ) : (
                 <Button
+                  onClick={onSubscribeClick}
                   sx={{ mt: 2, borderRadius: 4, px: 5 }}
                   variant='contained'
                   color='primary'>

@@ -1,14 +1,15 @@
-import { useState } from 'react'
-import { getMyVideosAPI } from '@/api/video'
-import VideoList from '@/components/video/VideoList'
 import { Container, Grid, Pagination } from '@mui/material'
+import { useState } from 'react'
 import { useQuery } from 'react-query'
-import Loading from '@/components/common/Loading'
-import Empty from '@/components/common/Empty'
+import { useParams } from 'react-router-dom'
+
+import { getUserVideosAPI } from '@/api/video'
+import { VideoList, Loading, Empty } from '@/components'
 
 export default function ChannelVideo() {
   const [videoCount, setVideoCount] = useState(null)
   const [page, setPage] = useState(1)
+  const { userId } = useParams()
   const pageSize = 8
   let pageCount: number
   videoCount ? (pageCount = Math.ceil(videoCount / pageSize)) : (pageCount = 1)
@@ -20,7 +21,11 @@ export default function ChannelVideo() {
   } = useQuery(
     ['my-videos', page],
     async () => {
-      const res = await getMyVideosAPI(page, pageSize)
+      const res = await getUserVideosAPI(userId, {
+        pageNum: page,
+        pageSize,
+      })
+
       setVideoCount(res.data.videosCount)
       return res.data.videos
     },

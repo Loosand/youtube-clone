@@ -1,18 +1,19 @@
-import React, { useState, useCallback } from 'react'
-import { styled } from '@mui/material/styles'
-import { Typography, TextField, Button, Box } from '@mui/material'
-import LoadingButton from '@mui/lab/LoadingButton'
 import {
   FileUpload as FileUploadIcon,
   Image as ImageIcon,
 } from '@mui/icons-material'
-import { useStore } from '@/store'
+import LoadingButton from '@mui/lab/LoadingButton'
+import { Typography, TextField, Button, Box } from '@mui/material'
+import { styled } from '@mui/material/styles'
+import React, { useState, useCallback } from 'react'
+
 import { createVideoAPI } from '@/api/video'
 import {
   createUploadVideoAPI,
   refreshUploadVideoAPI,
   uploadPicAPI,
 } from '@/api/vod'
+import { useStore } from '@/store'
 
 export default function Upload() {
   const [loading, setLoading] = useState(false)

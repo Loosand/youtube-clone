@@ -6,15 +6,24 @@ import {
   CardContent,
   Typography,
   Skeleton,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from '@mui/material'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import Dialog from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogContent from '@mui/material/DialogContent'
-import DialogContentText from '@mui/material/DialogContentText'
-import DialogTitle from '@mui/material/DialogTitle'
-import { useState } from 'react'
+import { User } from '@/types/user'
+
+type ChannelCardProps = {
+  loading: boolean
+  user: User
+  isSubscribed: boolean
+  onUnSubscribeClick: () => void
+  onSubscribeClick: () => void
+}
 
 export default function ChannelCard({
   loading,
@@ -22,13 +31,13 @@ export default function ChannelCard({
   isSubscribed = true,
   onUnSubscribeClick,
   onSubscribeClick,
-}) {
+}: ChannelCardProps) {
   const navigate = useNavigate()
+  const [open, setOpen] = useState(false)
+
   const handleGoVideoDetail = () => {
     navigate(`/${user._id}`)
   }
-
-  const [open, setOpen] = useState(false)
 
   const handleSubscribeClick = (e) => {
     e.stopPropagation()

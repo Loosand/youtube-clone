@@ -1,14 +1,13 @@
-import ChannelList from '@/components/channel/ChannelList'
-import { getSubChannelsAPI, unsubscribeAPI, subscribeAPI } from '@/api/channel'
 import { useState } from 'react'
-import { useStore } from '@/store'
-import Loading from '@/components/common/Loading'
-import Empty from '@/components/common/Empty'
 import { useQuery } from 'react-query'
+
+import { getSubChannelsAPI, unsubscribeAPI, subscribeAPI } from '@/api/channel'
+import { ChannelList, Loading, Empty } from '@/components'
+import { useStore } from '@/store'
 
 export default function SubChannel() {
   const { userId } = useStore()
-  const [subscriptionStatus, setSubscriptionStatus] = useState<any>({})
+  const [subscriptionStatus, setSubscriptionStatus] = useState({})
 
   const {
     data: subList,

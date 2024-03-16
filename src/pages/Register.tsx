@@ -1,4 +1,5 @@
-import { FormEvent, useState } from 'react'
+import { LockOutlined as LockOutlinedIcon } from '@mui/icons-material'
+import { LoadingButton } from '@mui/lab'
 import {
   Avatar,
   CssBaseline,
@@ -11,10 +12,10 @@ import {
   Typography,
   Container,
 } from '@mui/material'
-import LoadingButton from '@mui/lab/LoadingButton'
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
-import { registerAPI } from '@/api/user'
+import { FormEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+
+import { registerAPI } from '@/api/user'
 import { useStore } from '@/store'
 
 type Form = {
@@ -38,7 +39,7 @@ export default function Register() {
   })
 
   // 获取表单
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,

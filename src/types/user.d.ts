@@ -6,6 +6,7 @@ export type User = {
   cover: string
   subscribersCount: number
   channelDescription: string
+  isSubscribed: boolean
 }
 
 export type LoginRes = {
@@ -25,3 +26,14 @@ export type ProfileRes = LoginRes & {
 }
 
 export type UpdateProfileRes = LoginRes
+
+export type Channel = {
+  username: string
+  email: string
+  avatar: string
+  cover: string
+  channelDescription: string
+  subscribersCount: number
+  isSubscribed: boolean
+  videosCount: number
+}

@@ -1,4 +1,3 @@
-import React, { useState } from 'react'
 import {
   Box,
   Stepper,
@@ -7,8 +6,8 @@ import {
   Button,
   Typography,
 } from '@mui/material'
-import UploadQuick from '@/components/upload/UploadQuick'
-import Upload from '@/components/upload/Upload'
+
+import { UploadQuick, Upload } from '@/components'
 import { useStore } from '@/store'
 
 const steps = ['快速上传', '视频设置', '大功告成']

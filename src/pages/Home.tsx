@@ -1,8 +1,7 @@
 import { useQuery } from 'react-query'
+
 import { getRandomVideosAPI } from '@/api/video'
-import VideoList from '@/components/video/VideoList'
-import Loading from '@/components/common/Loading'
-import Empty from '@/components/common/Empty'
+import { VideoList, Empty, Loading } from '@/components'
 import { useStore } from '@/store'
 
 export default function MyChannelVideo() {

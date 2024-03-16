@@ -1,7 +1,8 @@
-import { type User } from './user'
 import { User } from '../models/user'
 
-export type VideoRes = {
+import { type User } from './user'
+
+export type VideoModel = {
   _id: string
   title: string
   description: string

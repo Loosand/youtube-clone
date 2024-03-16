@@ -1,10 +1,12 @@
 import axios, { AxiosError } from 'axios'
+
 import { getToken, removeToken } from '@/utils/token'
 
-export interface ResponseData<T = any> {
+export interface ResponseData<T> {
   code: number
   message: string
   data: T
+  error?: string
 }
 
 const request = axios.create({

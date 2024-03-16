@@ -1,9 +1,9 @@
-import { useState } from 'react'
-import { getSubVideosAPI } from '@/api/video'
-import VideoList from '@/components/video/VideoList'
 import { Box, Grid, Pagination, Typography } from '@mui/material'
-import Loading from '@/components/common/Loading'
+import { useState } from 'react'
 import { useQuery } from 'react-query'
+
+import { getSubVideosAPI } from '@/api/video'
+import { VideoList, Loading } from '@/components'
 
 export default function SubVideo() {
   const [videoCount, setVideoCount] = useState(null)

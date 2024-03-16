@@ -13,6 +13,16 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import { useNavigate } from 'react-router-dom'
 import 'dayjs/locale/zh-cn'
 
+type VideoCardProps = {
+  loading: boolean
+  id: string
+  img: string
+  title: string
+  desc: string
+  auth: string
+  date: string
+}
+
 export default function VideoCard({
   loading,
   id,
@@ -21,7 +31,7 @@ export default function VideoCard({
   desc,
   auth,
   date,
-}) {
+}: VideoCardProps) {
   const navigate = useNavigate()
   dayjs.extend(relativeTime)
 

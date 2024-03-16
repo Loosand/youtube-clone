@@ -1,10 +1,10 @@
-import { request } from '@/utils'
 import {
   type ProfileRes,
   type RegisterRes,
   type UpdateProfileRes,
   type LoginRes,
 } from '@/types/user'
+import { request } from '@/utils'
 
 // 登录
 export function loginAPI(data: { email: string; password: string }) {

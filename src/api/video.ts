@@ -1,6 +1,6 @@
 import { request } from '@/utils'
 import {
-  type VideoRes,
+  type VideoModel,
   type CreateVideoRes,
   type VideoListRes,
 } from '@/types/video'
@@ -20,7 +20,7 @@ export const createVideoAPI = (data: {
 
 // 获取视频
 export const getVideoAPI = (videoId: string) => {
-  return request<VideoRes>({
+  return request<VideoModel>({
     url: `/videos/${videoId}`,
     method: 'GET',
     params: { videoId },
@@ -62,7 +62,7 @@ export const getUserVideosAPI = (
 
 // 随机推荐视频
 export const getRandomVideosAPI = () => {
-  return request<VideoRes[]>({
+  return request<VideoModel[]>({
     url: '/recommend',
     method: 'GET',
   })

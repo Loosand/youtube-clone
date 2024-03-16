@@ -1,4 +1,4 @@
-import React from 'react'
+import { Close as CloseIcon } from '@mui/icons-material'
 import {
   styled,
   Dialog,
@@ -7,9 +7,10 @@ import {
   DialogTitle,
   DialogContent,
 } from '@mui/material'
-import CloseIcon from '@mui/icons-material/Close'
+import React from 'react'
+
+import { UploadStep } from '@/components'
 import { useStore } from '@/store'
-import UploadStep from '@/components/upload/UploadStep'
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {

@@ -1,5 +1,5 @@
 export const createUpload = (set: any) => ({
-  uploadState: true,
+  uploadState: false,
   selectedFile: null,
   activeStep: 0,
 

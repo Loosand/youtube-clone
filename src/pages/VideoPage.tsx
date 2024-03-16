@@ -1,21 +1,32 @@
+import { Button, Grid, Paper } from '@mui/material'
+import { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+
+import MyChannelVideo from './Home'
+
+import { subscribeAPI, unsubscribeAPI } from '@/api/channel'
 import { getVideoAPI } from '@/api/video'
 import { getVideoPlayAuthAPI } from '@/api/vod'
-import { useState, useEffect } from 'react'
-import { Button, Grid, Paper } from '@mui/material'
-import { useParams } from 'react-router-dom'
+import { useStore } from '@/store'
+import { type VideoModel } from '@/types/video'
 
 declare global {
   interface Window {
-    Aliplayer: any
+    Aliplayer: unknown
   }
 }
 
 export default function VideoPage() {
-  const [video, setVideo] = useState(null)
-  // const [playerData, setPlayerData] = useState(null)
+  const { userId } = useStore()
+  const [video, setVideo] = useState<VideoModel>(null)
   const { videoId } = useParams()
+  const [isSubscribed, setIsSubscribed] = useState(false)
+  const navigate = useNavigate()
 
-  // 获取视频列表
+  const isSelf = userId === video?.user._id
+
+  // 获取视频
   const fetchVideo = async (id) => {
     try {
       const res = await getVideoAPI(id)
@@ -27,7 +38,7 @@ export default function VideoPage() {
 
   useEffect(() => {
     fetchVideo(videoId)
-  }, [videoId])
+  }, [videoId, isSubscribed])
 
   const fetchPlayVideo = async (vodVideoId: string) => {
     const data = await getVideoPlayAuthAPI(vodVideoId)
@@ -64,13 +75,32 @@ export default function VideoPage() {
     return p
   }
 
+  const handleSubscribeClick = (e) => {
+    e.stopPropagation()
+    subscribeAPI(video?.user._id).then((res) => {
+      if (Number(res.code) === 200) {
+        setIsSubscribed(true)
+      }
+    })
+  }
+
+  const handleUnSubscribeClick = (e) => {
+    e.stopPropagation()
+    unsubscribeAPI(video?.user._id).then((res) => {
+      if (Number(res.code) === 200) {
+        setIsSubscribed(false)
+      }
+    })
+  }
+
   return (
-    <Grid className='bg-slate-400 p-5' container spacing={3}>
+    <Grid className='min-h-screen bg-slate-400 p-5' container spacing={3}>
       <Grid item xs={12}>
         <Button variant='contained' onClick={() => window.history.back()}>
           返回
         </Button>
       </Grid>
+
       {/* VIDEO INFO */}
       <Grid item xs={12} md={8} lg={8}>
         <Grid container direction='column' spacing={3}>
@@ -83,11 +113,41 @@ export default function VideoPage() {
           </Grid>
 
           <Grid item spacing={3} container>
-            <Grid item xs={8}>
-              <Paper className='h-20'>123</Paper>
-            </Grid>
-            <Grid item xs={4}>
-              <Paper className='h-20'>123</Paper>
+            <Grid item xs={12}>
+              <Paper
+                onClick={() => {
+                  navigate(`/${video?.user._id}`)
+                }}
+                className='flex h-[7rem] cursor-pointer justify-between'>
+                <div className='flex items-center gap-5'>
+                  <img
+                    src={video?.user.avatar}
+                    className='h-full rounded-full p-4'
+                    alt=''
+                  />
+                  <div className='flex flex-col items-start gap-2'>
+                    <h2 className='text-xl font-semibold'>{video?.title}</h2>
+                    <p className='text-base text-slate-800'>
+                      {video?.description}
+                    </p>
+                  </div>
+                </div>
+
+                {!isSelf && (
+                  <Button
+                    className='w-20 whitespace-nowrap'
+                    sx={{ width: '10rem' }}
+                    variant={isSubscribed ? 'outlined' : 'contained'}
+                    color='primary'
+                    onClick={
+                      isSubscribed
+                        ? handleUnSubscribeClick
+                        : handleSubscribeClick
+                    }>
+                    {isSubscribed ? '已订阅' : '订阅'}
+                  </Button>
+                )}
+              </Paper>
             </Grid>
           </Grid>
 
@@ -101,10 +161,8 @@ export default function VideoPage() {
       </Grid>
 
       {/* RECOMMEND */}
-      <Grid item className='hidden sm:block' xs={12} md={4} lg={4}>
-        <Paper className='flex h-screen flex-col p-2'>
-          <div>456</div>
-        </Paper>
+      <Grid className='hidden p-8 sm:block' item xs={4}>
+        <MyChannelVideo />
       </Grid>
     </Grid>
   )

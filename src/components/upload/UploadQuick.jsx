@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
-import { styled } from '@mui/material/styles'
-import { Typography, Button, IconButton, Box } from '@mui/material'
 import { FileUpload as FileUploadIcon } from '@mui/icons-material'
+import { Typography, Button, IconButton, Box } from '@mui/material'
+import { styled } from '@mui/material/styles'
+import React, { useState } from 'react'
+
 import { useStore } from '@/store'
 
 export default function UploadQuick() {

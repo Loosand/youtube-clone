@@ -1,4 +1,11 @@
 import {
+  VideoLibrary as VideoLibraryIcon,
+  Subscriptions as SubscriptionsIcon,
+  Home as HomeIcon,
+  AccountCircle as AccountCircleIcon,
+  LocalMovies as LocalMoviesIcon,
+} from '@mui/icons-material'
+import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
@@ -7,15 +14,8 @@ import {
   Divider,
   Box,
 } from '@mui/material'
-import {
-  VideoLibrary as VideoLibraryIcon,
-  Subscriptions as SubscriptionsIcon,
-  Home as HomeIcon,
-  AccountCircle as AccountCircleIcon,
-  LocalMovies as LocalMoviesIcon,
-} from '@mui/icons-material'
-import { useLocation } from 'react-router-dom'
-import { Link } from 'react-router-dom'
+import { useLocation, Link } from 'react-router-dom'
+
 import { useStore } from '@/store'
 
 export default function FlatMenu({ menuOpen }) {

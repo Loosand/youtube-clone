@@ -1,17 +1,13 @@
-import React, { useState } from 'react'
-import { useEffect } from 'react'
-import Button from '@mui/material/Button'
-import Avatar from '@mui/material/Avatar'
-import Menu from '@mui/material/Menu'
-import MenuItem from '@mui/material/MenuItem'
-import Fade from '@mui/material/Fade'
-import Chip from '@mui/material/Chip'
-import { getProfileAPI } from '@/api/user'
-import { useStore } from '@/store'
+import { Button, Avatar, Menu, MenuItem, Fade, Chip } from '@mui/material'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { getProfileAPI } from '@/api/user'
+import { useStore } from '@/store'
+
 export default function Profile() {
-  const { username, setUsername, setUserId, clearUserInfo } = useStore()
+  const { username, avatar, setUsername, setAvatar, setUserId, clearUserInfo } =
+    useStore()
   const navigate = useNavigate()
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -41,8 +37,9 @@ export default function Profile() {
     getProfileAPI().then((res) => {
       setUsername(res.data.username)
       setUserId(res.data.id)
+      setAvatar(res.data.avatar)
     })
-  }, [setUserId, setUsername])
+  }, [setUserId, setUsername, avatar])
 
   return (
     <div>
@@ -54,12 +51,7 @@ export default function Profile() {
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}>
         <Chip
-          avatar={
-            <Avatar
-              alt='Photo'
-              src='https://loosand-picture.oss-cn-hangzhou.aliyuncs.com/img/bun.svg'
-            />
-          }
+          avatar={<Avatar alt='Photo' src={avatar} />}
           label={username || 'Loading...'}
           variant='filled'
           color='primary'

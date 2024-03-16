@@ -1,16 +1,17 @@
-import VideoCard from '@/components/video/VideoCard'
 import { Grid } from '@mui/material'
 
-export default function VideoList({
-  loading,
-  videos,
-}: {
+import VideoCard from '@/components/video/VideoCard'
+import { type VideoModel } from '@/types/video'
+
+type VideoListProps = {
   loading?: boolean
-  videos: any
-}) {
+  videos: VideoModel[]
+}
+
+export default function VideoList({ loading, videos }: VideoListProps) {
   return (
     <Grid container spacing={3}>
-      {videos?.map((item: any) => (
+      {videos?.map((item: VideoModel) => (
         <VideoCard
           loading={loading}
           img={item.cover}

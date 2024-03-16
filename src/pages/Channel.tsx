@@ -1,26 +1,25 @@
-import { Outlet } from 'react-router-dom'
-import ProfileCard from '@/components/channel/ProfileCard'
 import { Box } from '@mui/material'
-import NavBar from '@/components/channel/NavBar'
-import { getChannelInfoAPI } from '@/api/channel'
-import { useParams } from 'react-router-dom'
+import { useState } from 'react'
 import { useQuery } from 'react-query'
-import Loading from '@/components/common/Loading'
-import { useStore } from '@/store'
+import { Outlet, useParams } from 'react-router-dom'
+
+import { getChannelInfoAPI, subscribeAPI, unsubscribeAPI } from '@/api/channel'
+import { NavBar, Loading, ProfileCard } from '@/components'
+import useCheckIsSelf from '@/hooks/useCheckIsSelf'
+
+const MENU = ['', 'video', 'dynamic']
 
 export default function Channel() {
   const { userId } = useParams()
-  const { userId: myUserId } = useStore()
-  const isMine = userId === myUserId
-
-  const menu = ['', 'video', 'dynamic']
+  const isMine = useCheckIsSelf(userId)
+  const [isSubscribed, setIsSubscribed] = useState(false)
 
   const {
-    data: user,
+    data: channel,
     isLoading,
     isFetching,
   } = useQuery(
-    'channel-list',
+    [isSubscribed],
     async () => {
       const res = await getChannelInfoAPI(userId)
       return res.data
@@ -30,6 +29,24 @@ export default function Channel() {
     },
   )
 
+  const handleSubscribeClick = () => {
+    if (channel.isSubscribed) {
+      unsubscribeAPI(userId).then((res) => {
+        if (Number(res.code) === 200) {
+          setIsSubscribed(false)
+        }
+      })
+      return
+    } else {
+      subscribeAPI(userId).then((res) => {
+        if (Number(res.code) === 200) {
+          setIsSubscribed(true)
+        }
+      })
+      return
+    }
+  }
+
   if (isLoading) {
     return <Loading />
   }
@@ -38,11 +55,13 @@ export default function Channel() {
     <Box className='pb-20'>
       <Box className='p-4'>
         <ProfileCard
+          isSubscribed={isSubscribed}
+          onSubscribeClick={handleSubscribeClick}
           loading={isFetching || isLoading}
           isMine={isMine}
-          user={user}
+          user={channel}
         />
-        <NavBar menu={menu} />
+        <NavBar menu={MENU} />
       </Box>
       <Outlet />
     </Box>

@@ -6,7 +6,6 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Guard from './components/common/Guard'
 import UserInfo from './pages/UserInfo'
-import UploadDialog from '@/pages/UploadDialog'
 import VideoPage from './pages/VideoPage'
 import SubVideo from './pages/SubVideo'
 import SubChannel from './pages/SubChannel'
@@ -36,7 +35,6 @@ export default function Router() {
           <Route path='subchannel' element={<SubChannel />} />
           <Route path='subvideo' element={<SubVideo />} />
           <Route path='userinfo' element={<UserInfo />} />
-          <Route path='upload' element={<UploadDialog />} />
         </Route>
 
         <Route path='video/:videoId' element={<VideoPage />} />

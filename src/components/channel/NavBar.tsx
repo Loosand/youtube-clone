@@ -1,18 +1,22 @@
-import { useState } from 'react'
-import Tabs from '@mui/material/Tabs'
-import Tab from '@mui/material/Tab'
 import Box from '@mui/material/Box'
+import Tab from '@mui/material/Tab'
+import Tabs from '@mui/material/Tabs'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-export default function NavBar({ menu }) {
+type NavBarProps = {
+  menu: string[]
+}
+
+export default function NavBar({ menu }: NavBarProps) {
   const navigate = useNavigate()
   const [value, setValue] = useState(0)
 
-  const handleChange = (_event, newValue) => {
+  const handleChange = (_e, newValue: number) => {
     setValue(newValue)
   }
 
-  const handleChangeRoute = (route) => {
+  const handleChangeRoute = (route: string) => {
     navigate(route)
   }
 

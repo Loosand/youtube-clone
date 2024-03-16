@@ -1,5 +1,9 @@
-import { useState } from 'react'
-import { styled, Breakpoint } from '@mui/material/styles'
+import {
+  ChevronLeft as ChevronLeftIcon,
+  Notifications as NotificationsIcon,
+  Menu as MenuIcon,
+  VideoCall as VideoCallIcon,
+} from '@mui/icons-material'
 import {
   CssBaseline,
   Drawer as MuiDrawer,
@@ -12,20 +16,15 @@ import {
   AppBar as MuiAppBar,
   AppBarProps as MuiAppBarProps,
 } from '@mui/material'
-import {
-  ChevronLeft as ChevronLeftIcon,
-  Notifications as NotificationsIcon,
-  Menu as MenuIcon,
-  VideoCall as VideoCallIcon,
-} from '@mui/icons-material'
+import { styled, Breakpoint } from '@mui/material/styles'
+import { useState } from 'react'
 import { Outlet } from 'react-router-dom'
-// import FoldMenu from "./Menu"
+
 import FlatMenu from './FlatMenu'
-import Profile from '../components/user/Profile'
+
+import { Profile, Toast, DarkModeToggle } from '@/components'
+import UploadDialog from '@/pages/UploadDialog'
 import { useStore } from '@/store'
-import { useNavigate } from 'react-router-dom'
-import Toast from '@/components/common/Toast'
-import DarkModeToggle from '@/components/common/DarkModeToggle'
 
 const drawerWidth = 240
 
@@ -78,14 +77,11 @@ const Drawer = styled(MuiDrawer, {
 }))
 
 export default function Dashboard() {
-  const navigate = useNavigate()
-
   const [open, setOpen] = useState(true)
   const { setUploadState } = useStore()
 
   const handleUploadOpen = () => {
     setUploadState(true)
-    navigate('/upload')
   }
 
   // 菜单折叠
@@ -96,6 +92,7 @@ export default function Dashboard() {
   return (
     <>
       <Toast />
+      <UploadDialog />
 
       <Box className='flex'>
         <CssBaseline />

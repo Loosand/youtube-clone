@@ -1,4 +1,18 @@
 import {
+  ExpandLess,
+  ExpandMore,
+  VideoLibrary,
+  VideoCameraFront,
+  Subscriptions,
+  ModeComment,
+  Home,
+  Person,
+  AccountCircle,
+  TableChart,
+  Videocam,
+  LocalMovies,
+} from '@mui/icons-material'
+import {
   ListItemButton,
   ListItemIcon,
   Collapse,
@@ -6,19 +20,6 @@ import {
   List,
   Drawer,
 } from '@mui/material'
-import ExpandLess from '@mui/icons-material/ExpandLess'
-import ExpandMore from '@mui/icons-material/ExpandMore'
-import VideoLibraryIcon from '@mui/icons-material/VideoLibrary'
-import VideoCameraFrontIcon from '@mui/icons-material/VideoCameraFront'
-import SubscriptionsIcon from '@mui/icons-material/Subscriptions'
-import ModeCommentIcon from '@mui/icons-material/ModeComment'
-import HomeIcon from '@mui/icons-material/Home'
-import PersonIcon from '@mui/icons-material/Person'
-import AccountCircleIcon from '@mui/icons-material/AccountCircle'
-import TableChartIcon from '@mui/icons-material/TableChart'
-import VideocamIcon from '@mui/icons-material/Videocam'
-import LocalMoviesIcon from '@mui/icons-material/LocalMovies'
-
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
@@ -28,65 +29,65 @@ const menu = [
   {
     text: '首页',
     path: 'home',
-    icon: <HomeIcon />,
+    icon: <Home />,
   },
   {
     primaryText: '频道',
-    icon: <VideocamIcon />,
+    icon: <Videocam />,
     secondaryItems: [
       // 我的订阅频道的视频
       {
         text: '订阅内容',
         path: 'subscribe',
-        icon: <VideoLibraryIcon />,
+        icon: <VideoLibrary />,
       },
       // 我的订阅频道
       {
         text: '关注的频道',
         path: 'subscriptions',
-        icon: <SubscriptionsIcon />,
+        icon: <Subscriptions />,
       },
     ],
   },
   {
     primaryText: '我的',
-    icon: <PersonIcon />,
+    icon: <Person />,
     secondaryItems: [
       // 创建视频
       {
         text: '你的频道',
         path: 'self',
-        icon: <LocalMoviesIcon />,
+        icon: <LocalMovies />,
       },
       // 管理视频
       {
         text: '你的视频',
         path: 'video',
-        icon: <VideoCameraFrontIcon />,
+        icon: <VideoCameraFront />,
       },
       // 管理评论
       {
         text: '你的评论',
         path: 'comment',
-        icon: <ModeCommentIcon />,
+        icon: <ModeComment />,
       },
     ],
   },
   {
     text: '创建视频',
     path: 'upload',
-    icon: <HomeIcon />,
+    icon: <Home />,
   },
   // 个人信息
   {
     text: '个人信息',
     path: 'information',
-    icon: <AccountCircleIcon />,
+    icon: <AccountCircle />,
   },
   {
     text: 'Charts',
     path: 'charts',
-    icon: <TableChartIcon />,
+    icon: <TableChart />,
   },
 ]
 

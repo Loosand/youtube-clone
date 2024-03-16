@@ -1,11 +1,12 @@
-import ChannelCard from '@/components/channel/ChannelCard'
 import { Box } from '@mui/material'
+
+import ChannelCard from '@/components/channel/ChannelCard'
 import { type ChannelRes } from '@/types/channel'
 
 type ChannelListProps = {
   loading?: boolean
   subList: ChannelRes[]
-  subscriptionStatus: boolean
+  subscriptionStatus: Record<string, boolean>
   onUnSubscribeClick: (channelId: string) => void
   onSubscribeClick: (channelId: string) => void
 }

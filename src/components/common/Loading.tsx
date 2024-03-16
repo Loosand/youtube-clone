@@ -1,6 +1,10 @@
 import CircularProgress from '@mui/material/CircularProgress'
 
-const Loading = ({ height }: { height?: string }) => {
+type LoadingProps = {
+  height?: string
+}
+
+const Loading = ({ height }: LoadingProps) => {
   return (
     <div
       style={{ height: height ? height : '65vh' }}

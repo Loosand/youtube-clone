@@ -1,11 +1,11 @@
-import { useState } from 'react'
-import { styled } from '@mui/material/styles'
 import { Button, CssBaseline, TextField, Box, Container } from '@mui/material'
-import { Image as ImageIcon } from '@mui/icons-material'
+import { styled } from '@mui/material/styles'
+import { useState, useEffect } from 'react'
+
 import { updateProfileAPI, getProfileAPI } from '@/api/user'
-import { useEffect } from 'react'
+import { uploadPicAPI } from '@/api/vod'
+import { Toast } from '@/components'
 import { useStore } from '@/store'
-import Toast from '@/components/common/Toast'
 
 type Form = {
   username: string
@@ -17,6 +17,8 @@ type Form = {
 
 export default function UserInfo() {
   const { setToast } = useStore()
+  const [avatarUrl, setAvatarUrl] = useState('')
+  const [avatar, setAvatar] = useState<string>()
 
   const [form, setForm] = useState<Form>({
     username: '',
@@ -32,11 +34,32 @@ export default function UserInfo() {
     })
   }, [])
 
+  useEffect(() => {
+    setAvatarUrl(avatarUrl)
+  }, [avatar])
+
   const handleChange = (e) => {
     setForm((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }))
+  }
+
+  const handleAvatarChange = async (e) => {
+    const file = await e.target.files[0]
+
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      setAvatar(e.target.result as string)
+    }
+    reader.readAsDataURL(file)
+
+    const formData = new FormData()
+    formData.append('file', file)
+
+    uploadPicAPI(formData).then((res) => {
+      setAvatarUrl(res.data)
+    })
   }
 
   const handleSubmit = async (e) => {
@@ -47,7 +70,7 @@ export default function UserInfo() {
       return
     }
 
-    updateProfileAPI(form)
+    updateProfileAPI({ ...form, avatar: avatarUrl })
       .then((res) => {
         setToast(res.message, 'success')
       })
@@ -114,21 +137,27 @@ export default function UserInfo() {
               rows={4}
               fullWidth
             />
-            <Box className='mt-4'>
-              <label htmlFor='contained-button-file'>
-                <Input
-                  accept='image/*'
-                  id='contained-button-file'
-                  onChange={handleChange}
-                  name='avatar'
-                  type='file'
-                />
-                <Button
-                  startIcon={<ImageIcon />}
-                  variant='contained'
-                  component='span'>
+            <Box className='mt-4 flex items-center gap-5'>
+              <Input
+                accept='image/*'
+                id='contained-button-avatar'
+                onChange={handleAvatarChange}
+                name='cover'
+                type='file'
+              />
+
+              <label
+                className='flex flex-col items-center gap-4'
+                htmlFor='contained-button-avatar'>
+                <span className='font-base self-start pl-4 text-sm text-gray-600 '>
                   上传头像
-                </Button>
+                </span>
+
+                <img
+                  className='h-64 w-64 border-2 border-dashed'
+                  src={avatar}
+                  alt='avatar'
+                />
               </label>
             </Box>
             <Button

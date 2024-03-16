@@ -31,7 +31,7 @@ export function getVideoPlayAuthAPI(vodVideoId: string) {
   })
 }
 
-export function uploadPicAPI(formData: any) {
+export function uploadPicAPI(formData: FormData) {
   return request({
     url: '/vod/uploadPic',
     method: 'POST',
