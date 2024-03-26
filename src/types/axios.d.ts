@@ -2,9 +2,10 @@
 import axios from 'axios'
 
 declare module 'axios' {
-  interface IAxios<D = null> {
+  interface IAxios {
     code: string
     message: string
+    error?: string
   }
-  export interface AxiosResponse<T = any> extends IAxios<D> {}
+  export interface AxiosResponse extends IAxios {}
 }

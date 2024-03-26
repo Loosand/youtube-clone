@@ -25,7 +25,10 @@ export type ProfileRes = LoginRes & {
   subscribersCount: number
 }
 
-export type UpdateProfileRes = LoginRes
+export type UpdateProfileRes = LoginRes & {
+  id: string
+  subscribeCount: number
+}
 
 export type Channel = {
   username: string

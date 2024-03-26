@@ -16,7 +16,12 @@ type Form = {
 }
 
 export default function UserInfo() {
-  const { setToast } = useStore()
+  const {
+    setToast,
+    setAvatar: setStoreAvatar,
+    setUsername,
+    setUserId,
+  } = useStore()
   const [avatarUrl, setAvatarUrl] = useState('')
   const [avatar, setAvatar] = useState<string>()
 
@@ -31,12 +36,9 @@ export default function UserInfo() {
   useEffect(() => {
     getProfileAPI().then((res) => {
       setForm(res.data)
+      setAvatarUrl(res.data.avatar)
     })
   }, [])
-
-  useEffect(() => {
-    setAvatarUrl(avatarUrl)
-  }, [avatar])
 
   const handleChange = (e) => {
     setForm((prev) => ({
@@ -73,6 +75,9 @@ export default function UserInfo() {
     updateProfileAPI({ ...form, avatar: avatarUrl })
       .then((res) => {
         setToast(res.message, 'success')
+        setStoreAvatar(res?.data.avatar)
+        setUsername(res?.data.username)
+        setUserId(res?.data.id)
       })
       .catch((error) => {
         setToast(error.response.data.error, 'error')
@@ -155,7 +160,7 @@ export default function UserInfo() {
 
                 <img
                   className='h-64 w-64 border-2 border-dashed'
-                  src={avatar}
+                  src={avatarUrl ? avatarUrl : avatar}
                   alt='avatar'
                 />
               </label>

@@ -35,7 +35,7 @@ export default function Login() {
     remember: false,
   })
 
-  const handleChange = (e: any) => {
+  const handleChange = (e) => {
     setForm((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,

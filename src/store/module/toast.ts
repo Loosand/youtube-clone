@@ -1,6 +1,6 @@
 type Category = 'error' | 'info' | 'success' | 'warning'
 
-export const createToast = (set: any) => ({
+export const createToast = (set) => ({
   open: false,
   message: '',
   type: 'info' as Category,

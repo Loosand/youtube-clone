@@ -1,4 +1,4 @@
-export const createLogin = (set: any) => ({
+export const createLogin = (set) => ({
   email: 'loosand@163.com',
   password: '196475',
 

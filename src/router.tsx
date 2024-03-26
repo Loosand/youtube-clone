@@ -1,18 +1,20 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+
+import Guard from './components/common/Guard'
 import Layout from './layout/Dashboard'
-import Home from '@/pages/Home'
-import ErrorPage from '@/pages/ErrorPage'
+import Channel from './pages/Channel'
+import ChannelDynamic from './pages/ChannelDynamic'
+// import ChannelHome from './pages/ChannelHome'
+import ChannelVideo from './pages/ChannelVideo'
 import Login from './pages/Login'
 import Register from './pages/Register'
-import Guard from './components/common/Guard'
+import SubChannel from './pages/SubChannel'
+import SubVideo from './pages/SubVideo'
 import UserInfo from './pages/UserInfo'
 import VideoPage from './pages/VideoPage'
-import SubVideo from './pages/SubVideo'
-import SubChannel from './pages/SubChannel'
-import Channel from './pages/Channel'
-import ChannelHome from './pages/ChannelHome'
-import ChannelVideo from './pages/ChannelVideo'
-import ChannelDynamic from './pages/ChannelDynamic'
+
+import ErrorPage from '@/pages/ErrorPage'
+import Home from '@/pages/Home'
 
 export default function Router() {
   return (
@@ -27,8 +29,8 @@ export default function Router() {
           <Route index element={<Home />} />
 
           <Route path=':userId' element={<Channel />}>
-            <Route index element={<ChannelHome />} />
-            <Route path='video' element={<ChannelVideo />} />
+            {/* <Route index element={<ChannelHome />} /> */}
+            <Route index element={<ChannelVideo />} />
             <Route path='dynamic' element={<ChannelDynamic />} />
           </Route>
 

@@ -89,6 +89,13 @@ export default function VideoCard({
               />
             ) : (
               <Typography
+                sx={{
+                  fontSize: 14,
+                  width: '100%',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                }}
                 gutterBottom
                 fontWeight={'semibold'}
                 variant='h6'
@@ -133,7 +140,15 @@ export default function VideoCard({
                 style={{ marginBottom: 6 }}
               />
             ) : (
-              <Typography variant='body2' color='text.secondary'>
+              <Typography
+                sx={{
+                  width: '100%',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                }}
+                variant='body2'
+                color='text.secondary'>
                 {desc}
               </Typography>
             )}

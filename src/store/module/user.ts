@@ -1,6 +1,6 @@
 import { getToken, setToken as _setToken, removeToken } from '@/utils/token'
 
-export const createUser = (set: any) => ({
+export const createUser = (set) => ({
   token: getToken || null,
 
   username: null,
