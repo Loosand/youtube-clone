@@ -1,9 +1,9 @@
-import { request } from '@/utils'
 import {
   type VideoModel,
   type CreateVideoRes,
   type VideoListRes,
 } from '@/types/video'
+import { request } from '@/utils'
 
 // 创建视频
 export const createVideoAPI = (data: {

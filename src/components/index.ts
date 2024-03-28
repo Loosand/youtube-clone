@@ -3,6 +3,11 @@ export { default as ChannelList } from './channel/ChannelList'
 export { default as NavBar } from './channel/NavBar'
 export { default as ProfileCard } from './channel/ProfileCard'
 
+export { default as ChatContainer } from './chat/ChatContainer'
+export { default as ChatInput } from './chat/ChatInput'
+export { default as Contacts } from './chat/Contacts'
+export { default as Welcome } from './chat/Welcome.jsx'
+
 export { default as CommentCard } from './comment/CommentCard'
 export { default as CommentList } from './comment/CommentList'
 

@@ -50,3 +50,10 @@ export function updateProfileAPI(data: {
     data,
   })
 }
+
+export function getAllUsersAPI(userId: string) {
+  return request({
+    url: `/users/${userId}`,
+    method: 'GET',
+  })
+}

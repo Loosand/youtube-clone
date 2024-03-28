@@ -6,6 +6,7 @@ import Channel from './pages/Channel'
 import ChannelDynamic from './pages/ChannelDynamic'
 // import ChannelHome from './pages/ChannelHome'
 import ChannelVideo from './pages/ChannelVideo'
+import Chat from './pages/Chat'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import SubChannel from './pages/SubChannel'
@@ -39,6 +40,7 @@ export default function Router() {
           <Route path='userinfo' element={<UserInfo />} />
         </Route>
 
+        <Route path='chat' element={<Chat />} />
         <Route path='video/:videoId' element={<VideoPage />} />
         <Route path='login' element={<Login />} />
         <Route path='register' element={<Register />} />
@@ -47,64 +49,3 @@ export default function Router() {
     </BrowserRouter>
   )
 }
-
-// const router = createBrowserRouter([
-//   {
-//     path: '/',
-//     element: (
-//       <Guard>
-//         <Layout />
-//       </Guard>
-//     ),
-//     children: [
-//       {
-//         index: true,
-//         element: <Home />,
-//       },
-//       {
-//         path: 'home',
-//         element: <Home />,
-//         children: [
-//           {
-//             index: true,
-//             element: <Home />,
-//           },
-//           {
-//             path: 'video',
-//             element: <Home />,
-//           },
-//           {
-//             path: 'dynamic',
-//             element: <Home />,
-//           },
-//         ],
-//       },
-//       {
-//         path: '/userinfo',
-//         element: <UserInfo />,
-//       },
-//       {
-//         path: '/upload',
-//         element: <Home />,
-//       },
-//     ],
-//   },
-//   {
-//     path: '/:userId/:videoId',
-//     element: <Home />,
-//   },
-//   {
-//     path: '/login',
-//     element: <Login />,
-//   },
-//   {
-//     path: '/register',
-//     element: <Register />,
-//   },
-//   {
-//     path: '*',
-//     element: <ErrorPage />,
-//   },
-// ])
-
-// export default router

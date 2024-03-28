@@ -53,6 +53,7 @@ export default function Login() {
       if (form.remember) setToken(res.data.token)
       setToast(res.message, 'success')
 
+      localStorage.setItem('userinfo', JSON.stringify(res.data))
       navigator('/')
     } catch (error) {
       setLoading(true)
