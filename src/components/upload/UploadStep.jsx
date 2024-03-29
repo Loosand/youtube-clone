@@ -10,7 +10,7 @@ import {
 import { UploadQuick, Upload } from '@/components'
 import { useStore } from '@/store'
 
-const steps = ['快速上传', '视频设置', '大功告成']
+const steps = ['快速上传', '视频设置']
 
 export default function UploadStep() {
   const { selectedFile, activeStep, setStepNext, setStepBack } = useStore()
@@ -63,7 +63,7 @@ export default function UploadStep() {
           <Box className='flex-auto' />
 
           <Button disabled={!selectedFile} onClick={handleNext}>
-            {activeStep === steps.length - 1 ? '完成' : '下一步'}
+            {activeStep === steps.length - 1 ? '' : '下一步'}
           </Button>
         </Box>
       )}

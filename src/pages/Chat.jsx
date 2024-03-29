@@ -14,6 +14,7 @@ export default function Chat() {
   useEffect(() => {
     if (currentUser) {
       socket.current = io('http://localhost:7001')
+      console.log(socket.current);
       socket.current.emit('add-user', currentUser.id)
     }
   }, [currentUser])

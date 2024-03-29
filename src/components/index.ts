@@ -17,6 +17,7 @@ export { default as Guard } from './common/Guard'
 export { default as Loading } from './common/Loading'
 export { default as Toast } from './common/Toast'
 
+export { default as LinearProgressWithLabel } from './upload/LinearProgressWithLabel'
 export { default as Upload } from './upload/Upload'
 export { default as UploadQuick } from './upload/UploadQuick'
 export { default as UploadStep } from './upload/UploadStep'

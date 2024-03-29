@@ -33,5 +33,5 @@ export default function MyChannelVideo() {
     return <Empty>暂无推荐视频</Empty>
   }
 
-  return <VideoList loading={isFetching || isLoading} videos={videoList} />
+  return <VideoList loading={isFetching} videos={videoList} />
 }

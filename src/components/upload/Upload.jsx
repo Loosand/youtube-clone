@@ -1,11 +1,10 @@
 import {
   FileUpload as FileUploadIcon,
-  Image as ImageIcon,
 } from '@mui/icons-material'
 import LoadingButton from '@mui/lab/LoadingButton'
-import { Typography, TextField, Button, Box } from '@mui/material'
+import { Typography, TextField, Box } from '@mui/material'
 import { styled } from '@mui/material/styles'
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 
 import { createVideoAPI } from '@/api/video'
 import {
@@ -13,15 +12,17 @@ import {
   refreshUploadVideoAPI,
   uploadPicAPI,
 } from '@/api/vod'
+import { LinearProgressWithLabel } from "@/components"
 import { useStore } from '@/store'
 
 export default function Upload() {
   const [loading, setLoading] = useState(false)
   const [submitResult, setSubmitResult] = useState('开始上传')
-  const [submitSuccess, setSubmitSuccess] = useState(false)
   const [cover, setCover] = useState()
   const [coverUrl, setCoverUrl] = useState()
+  const [progress, setProgress] = React.useState(0)
   const { selectedFile } = useStore()
+  const [canUpload, setCanUpload] = useState(false)
   const videoURL = useCallback(URL.createObjectURL(selectedFile), [])
 
   const [form, setForm] = useState({
@@ -29,6 +30,12 @@ export default function Upload() {
     description: '',
     vodVideoId: '',
   })
+
+  useEffect(() => {
+    if (!form.title && !form.description) {
+      setCanUpload(false)
+    }
+  }, [form])
 
   const handleChange = (e) => {
     setForm((prev) => ({
@@ -39,12 +46,23 @@ export default function Upload() {
 
   const handleCoverChange = async (e) => {
     const file = await e.target.files[0]
-    setCover(file)
+
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      setCover(e.target.result)
+    }
+    reader.readAsDataURL(file)
+
+    const formData = new FormData()
+    formData.append('file', file)
+
+    uploadPicAPI(formData).then((res) => {
+      setCoverUrl(res.data)
+    })
   }
 
   const createUploader = () => {
     const uploader = new window.AliyunUpload.Vod({
-      // userID，必填，您可以使用阿里云账号访问账号中心（https://account.console.aliyun.com/），即可查看账号ID
       userId: '1264280159456697',
       // 分片大小默认1 MB，不能小于100 KB（100*1024）
       partSize: 1048576,
@@ -58,9 +76,9 @@ export default function Upload() {
       // 开始上传
       onUploadstarted: async function (uploadInfo) {
         setLoading(true)
-        console.log('onUpload-----', uploadInfo)
+        setCanUpload(false)
         if (uploadInfo.videoId) {
-          const data = await refreshUploadVideoAPI(uploadInfo.videoId)
+          const data = await refreshUploadVideoAPI(uploadInfo?.videoId)
           uploader.setUploadAuthAndAddress(
             uploadInfo,
             data.UploadAuth,
@@ -83,7 +101,7 @@ export default function Upload() {
       // 文件上传成功
       onUploadSucceed: async function (uploadInfo) {
         setSubmitResult('上传成功！')
-        setSubmitSuccess(true)
+        setCanUpload(false)
         setLoading(false)
         console.log('onUploadSuccess', uploadInfo)
         form.vodVideoId = uploadInfo.videoId
@@ -93,18 +111,21 @@ export default function Upload() {
       },
       // 文件上传失败
       onUploadFailed: function (uploadInfo, code, message) {
-        setSubmitResult('上传失败！')
-        setLoading(false)
+        setSubmitResult('上传失败！点击重试')
+        setCanUpload(true)
+        setLoading(true)
         console.log('onUploadFailed: ', uploadInfo, code, message)
       },
       // 文件上传进度，单位：字节
       onUploadProgress: function (uploadInfo, totalSize, loadedPercent) {
         setSubmitResult('正在上传...')
-        console.log('onUploadProgress', `${Math.ceil(loadedPercent * 100)}%`)
+        setCanUpload(false)
+        setProgress(Math.ceil(loadedPercent * 100))
       },
       // 上传凭证或STS token超时
       onUploadTokenExpired: async function (uploadInfo) {
-        setSubmitResult('上传超时')
+        setSubmitResult('上传超时,点击重试')
+        setCanUpload(true)
         const { data } = await refreshUploadVideoAPI(uploadInfo.videoId)
         uploader.resumeUploadWithAuth(data.UploadAuth)
         console.log('onUploadTokenExpired:', uploadInfo)
@@ -112,29 +133,13 @@ export default function Upload() {
       // 全部文件上传结束
       onUploadEnd: function (uploadInfo) {
         setSubmitResult('上传成功！')
+        setCanUpload(false)
         setLoading(false)
         console.log('onUploadEnd:', uploadInfo)
       },
     })
 
     return uploader
-  }
-
-  const uploadCover = () => {
-    if (cover) {
-      const formData = new FormData()
-      formData.append('file', cover)
-
-      uploadPicAPI(formData).then((res) => {
-        setCoverUrl(res.data)
-      })
-    }
-  }
-
-  const handleUploadPic = () => {
-    if (cover) {
-      uploadCover()
-    }
   }
 
   const handleSubmit = async (e) => {
@@ -151,7 +156,7 @@ export default function Upload() {
   })
 
   return (
-    <Box className='m-auto my-4 flex flex-col'>
+    <Box className='m-auto my-4 flex gap-4 flex-col'>
       <Box className='grow basis-[400px]'>
         <Typography variant='h5' fontWeight='bold'>
           详细信息
@@ -191,14 +196,10 @@ export default function Upload() {
                 <label
                   className='flex items-center gap-4'
                   htmlFor='contained-button-file'>
-                  <img className='w-64' src={coverUrl} alt='' />
-                  <Button
-                    startIcon={<ImageIcon />}
-                    variant='contained'
-                    onClick={handleUploadPic}
-                    component='span'>
+                  <span className='font-base self-start text-sm text-gray-600 '>
                     上传封面
-                  </Button>
+                  </span>
+                  <img className='h-48 w-[22rem] border-2 border-dashed' src={coverUrl ? coverUrl : cover} alt='' />
                 </label>
               </Box>
             </Box>
@@ -207,8 +208,14 @@ export default function Upload() {
         </Box>
       </Box>
 
+      {
+        loading && <Box sx={{ width: '100%' }}>
+          <LinearProgressWithLabel value={progress} />
+        </Box>
+      }
+
       <LoadingButton
-        disabled={loading || submitSuccess}
+        disabled={!canUpload && !coverUrl}
         startIcon={<FileUploadIcon />}
         onClick={handleSubmit}
         loading={loading}

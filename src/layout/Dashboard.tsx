@@ -18,7 +18,7 @@ import {
 } from '@mui/material'
 import { styled, Breakpoint } from '@mui/material/styles'
 import { useState } from 'react'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 
 import FlatMenu from './FlatMenu'
 
@@ -77,6 +77,7 @@ const Drawer = styled(MuiDrawer, {
 }))
 
 export default function Dashboard() {
+  const navigate = useNavigate()
   const [open, setOpen] = useState(true)
   const { setUploadState } = useStore()
 
@@ -124,7 +125,12 @@ export default function Dashboard() {
               <VideoCallIcon />
             </IconButton>
 
-            <IconButton size='large' color='inherit'>
+            <IconButton
+              onClick={() => {
+                navigate('/chat')
+              }}
+              size='large'
+              color='inherit'>
               <Badge badgeContent={4} color='secondary'>
                 <NotificationsIcon />
               </Badge>

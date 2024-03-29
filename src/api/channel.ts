@@ -20,7 +20,7 @@ export function unsubscribeAPI(userId: string) {
 // 获取频道信息
 export function getChannelInfoAPI(userId: string) {
   return request<ChannelRes>({
-    url: `/users/${userId}`,
+    url: `/user/${userId}`,
     method: 'GET',
   })
 }

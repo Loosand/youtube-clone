@@ -23,11 +23,14 @@ export default function ChatContainer({ currentChat, socket }) {
         to: currentChat?._id
       });
 
-      setMessages(res.data);
+      setMessages(res);
+      console.log(res);
+
     } catch (error) {
       console.error("Error fetching messages:", error);
     }
   };
+
 
   useEffect(() => {
     getCurrentChat();

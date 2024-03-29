@@ -13,7 +13,7 @@ export function createUploadVideoAPI(params: CreateUploadVideoParams) {
   })
 }
 
-export function refreshUploadVideoAPI(videoId: string) {
+export function refreshUploadVideoAPI(videoId) {
   return request({
     url: '/vod/refreshUploadVideo',
     method: 'GET',
