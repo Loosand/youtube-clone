@@ -1,12 +1,15 @@
-export type User = {
+export type VideoUserRes = {
   _id: string
   username: string
-  email: string
   avatar: string
-  cover: string
   subscribersCount: number
-  channelDescription: string
   isSubscribed: boolean
+}
+
+export type User = VideoUserRes & {
+  email: string
+  cover: string
+  channelDescription: string
 }
 
 export type LoginRes = {

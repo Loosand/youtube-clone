@@ -36,7 +36,7 @@ export default function ChannelCard({
   const [open, setOpen] = useState(false)
 
   const handleGoVideoDetail = () => {
-    navigate(`/${user._id}`)
+    navigate(`/${user._id}?isSubscribed=${isSubscribed}`)
   }
 
   const handleSubscribeClick = (e) => {

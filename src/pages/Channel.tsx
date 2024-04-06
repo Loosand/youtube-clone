@@ -19,13 +19,16 @@ export default function Channel() {
     isLoading,
     isFetching,
   } = useQuery(
-    [isSubscribed],
+    [isSubscribed, userId],
     async () => {
       const res = await getChannelInfoAPI(userId)
       return res.data
     },
     {
       keepPreviousData: false,
+      onSuccess: (res) => {
+        setIsSubscribed(res.isSubscribed)
+      },
     },
   )
 

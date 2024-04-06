@@ -1,7 +1,10 @@
+import { VideoUserRes } from '@/types/user'
 import {
   type VideoModel,
   type CreateVideoRes,
   type VideoListRes,
+  AddCommentRes,
+  CommentRes,
 } from '@/types/video'
 import { request } from '@/utils'
 
@@ -20,7 +23,7 @@ export const createVideoAPI = (data: {
 
 // 获取视频
 export const getVideoAPI = (videoId: string) => {
-  return request<VideoModel>({
+  return request<VideoModel & { user: VideoUserRes }>({
     url: `/videos/${videoId}`,
     method: 'GET',
     params: { videoId },
@@ -65,5 +68,31 @@ export const getRandomVideosAPI = () => {
   return request<VideoModel[]>({
     url: '/recommend',
     method: 'GET',
+  })
+}
+
+export const addCommentAPI = (videoId: string, data: { content: string }) => {
+  return request<AddCommentRes>({
+    url: `/videos/${videoId}/comments`,
+    method: 'POST',
+    data,
+  })
+}
+
+export const getCommentAPI = (
+  videoId: string,
+  params: { pageNum?: number; pageSize?: 8 },
+) => {
+  return request<CommentRes[]>({
+    url: `/videos/${videoId}/comments`,
+    method: 'GET',
+    params,
+  })
+}
+
+export const deleteCommentAPI = (videoId: string, commentId: string) => {
+  return request({
+    url: `/videos/${videoId}/comments/${commentId}`,
+    method: 'DELETE',
   })
 }

@@ -19,7 +19,7 @@ export default function ChannelVideo() {
     isLoading,
     isFetching,
   } = useQuery(
-    ['my-videos', page],
+    ['my-videos', page, userId],
     async () => {
       const res = await getUserVideosAPI(userId, {
         pageNum: page,

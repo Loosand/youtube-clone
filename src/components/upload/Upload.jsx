@@ -32,8 +32,8 @@ export default function Upload() {
   })
 
   useEffect(() => {
-    if (!form.title && !form.description) {
-      setCanUpload(false)
+    if (form.title && form.descriptio) {
+      setCanUpload(true)
     }
   }, [form])
 
@@ -215,7 +215,7 @@ export default function Upload() {
       }
 
       <LoadingButton
-        disabled={!canUpload && !coverUrl}
+        disabled={!canUpload}
         startIcon={<FileUploadIcon />}
         onClick={handleSubmit}
         loading={loading}

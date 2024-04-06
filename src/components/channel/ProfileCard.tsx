@@ -82,27 +82,38 @@ export default function ProfileCard({
 
           {!isMine && (
             <>
-              {isSubscribed ? (
-                <Button
-                  onClick={onSubscribeClick}
-                  sx={{
-                    mt: 2,
-                    borderRadius: 4,
-                    px: 5,
-                    bgcolor: '#BFBFBF',
-                    color: 'black',
-                  }}
-                  startIcon={<NotificationsNoneIcon />}>
-                  已订阅
-                </Button>
+              {loading ? (
+                <Skeleton
+                  animation='wave'
+                  height={60}
+                  width='30%'
+                  className='mt-10 rounded-full'
+                />
               ) : (
-                <Button
-                  onClick={onSubscribeClick}
-                  sx={{ mt: 2, borderRadius: 4, px: 5 }}
-                  variant='contained'
-                  color='primary'>
-                  订阅
-                </Button>
+                <>
+                  {isSubscribed ? (
+                    <Button
+                      onClick={onSubscribeClick}
+                      sx={{
+                        mt: 2,
+                        borderRadius: 4,
+                        px: 5,
+                        bgcolor: '#BFBFBF',
+                        color: 'black',
+                      }}
+                      startIcon={<NotificationsNoneIcon />}>
+                      已订阅
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={onSubscribeClick}
+                      sx={{ mt: 2, borderRadius: 4, px: 5 }}
+                      variant='contained'
+                      color='primary'>
+                      订阅
+                    </Button>
+                  )}
+                </>
               )}
             </>
           )}

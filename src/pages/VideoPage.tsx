@@ -1,14 +1,24 @@
-import { Button, Grid, Paper } from '@mui/material'
+import {
+  Box,
+  Button,
+  Grid,
+  List,
+  ListItem,
+  ListItemText,
+  Paper,
+  TextField,
+} from '@mui/material'
 import { useState, useEffect } from 'react'
+import { useQuery } from 'react-query'
 import { useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 
-import MyChannelVideo from './Home'
-
 import { subscribeAPI, unsubscribeAPI } from '@/api/channel'
-import { getVideoAPI } from '@/api/video'
+import { getRandomVideosAPI, getVideoAPI } from '@/api/video'
 import { getVideoPlayAuthAPI } from '@/api/vod'
+import { VideoCard } from '@/components'
 import { useStore } from '@/store'
+import { VideoUserRes } from '@/types/user'
 import { type VideoModel } from '@/types/video'
 
 declare global {
@@ -18,21 +28,29 @@ declare global {
 }
 
 export default function VideoPage() {
-  const { userId } = useStore()
-  const [video, setVideo] = useState<VideoModel>(null)
-  const { videoId } = useParams()
-  const [isSubscribed, setIsSubscribed] = useState(false)
   const navigate = useNavigate()
-
+  const { videoId } = useParams()
+  const { userId, setToast } = useStore()
+  const [video, setVideo] = useState<VideoModel & { user: VideoUserRes }>(null)
+  const [isSubscribed, setIsSubscribed] = useState(false)
+  const [comment, setComment] = useState('')
+  const [comments, setComments] = useState([])
   const isSelf = userId === video?.user._id
 
-  // 获取视频
   const fetchVideo = async (id) => {
     try {
       const res = await getVideoAPI(id)
       setVideo(res.data)
+      setIsSubscribed(res.data.user.isSubscribed)
     } catch (error) {
       console.error(error)
+    }
+  }
+
+  const handleAddComment = () => {
+    if (comment.trim() !== '') {
+      setComments([...comments, comment])
+      setComment('')
     }
   }
 
@@ -93,6 +111,28 @@ export default function VideoPage() {
     })
   }
 
+  const { data: videoList, isLoading } = useQuery(
+    'home-videos',
+    async () => {
+      const res = await getRandomVideosAPI()
+      return res.data
+    },
+    {
+      keepPreviousData: true,
+      onError: (error) => {
+        setToast(error, 'error')
+      },
+    },
+  )
+
+  // const { data: commentList, isLoading: commentLoading } = useQuery(
+  //   'comments',
+  //   async () => {
+  //     const res = await getCommentAPI(videoId, { pageNum: 1, pageSize: 8 })
+  //     return res.data
+  //   },
+  // )
+
   return (
     <Grid className='min-h-screen bg-slate-400 p-5' container spacing={3}>
       <Grid item xs={12}>
@@ -116,7 +156,7 @@ export default function VideoPage() {
             <Grid item xs={12}>
               <Paper
                 onClick={() => {
-                  navigate(`/${video?.user._id}`)
+                  navigate(`/${video?.user._id}?isSubscribed=${isSubscribed}`)
                 }}
                 className='flex h-[7rem] cursor-pointer justify-between'>
                 <div className='flex items-center gap-5'>
@@ -134,18 +174,20 @@ export default function VideoPage() {
                 </div>
 
                 {!isSelf && (
-                  <Button
-                    className='w-20 whitespace-nowrap'
-                    sx={{ width: '10rem' }}
-                    variant={isSubscribed ? 'outlined' : 'contained'}
-                    color='primary'
-                    onClick={
-                      isSubscribed
-                        ? handleUnSubscribeClick
-                        : handleSubscribeClick
-                    }>
-                    {isSubscribed ? '已订阅' : '订阅'}
-                  </Button>
+                  <Box className='flex items-center p-10'>
+                    <Button
+                      className='h-16 w-20 whitespace-nowrap'
+                      sx={{ width: '10rem' }}
+                      variant={isSubscribed ? 'outlined' : 'contained'}
+                      color='primary'
+                      onClick={
+                        isSubscribed
+                          ? handleUnSubscribeClick
+                          : handleSubscribeClick
+                      }>
+                      {isSubscribed ? '已订阅' : '订阅'}
+                    </Button>
+                  </Box>
                 )}
               </Paper>
             </Grid>
@@ -153,8 +195,36 @@ export default function VideoPage() {
 
           {/* COMMENT */}
           <Grid item>
-            <Paper className='flex min-h-96 flex-col p-2'>
-              <div>567</div>
+            <Paper className='flex flex-col p-4'>
+              <TextField
+                label='发表评论'
+                variant='outlined'
+                fullWidth
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                style={{ marginBottom: '1rem' }}
+              />
+
+              <Button
+                variant='contained'
+                color='primary'
+                onClick={handleAddComment}>
+                发布评论
+              </Button>
+
+              <List style={{ marginTop: '1rem' }}>
+                {comments?.length === 0 ? (
+                  <ListItem>空空如也</ListItem>
+                ) : (
+                  <>
+                    {comments?.map((comment, index) => (
+                      <ListItem key={index}>
+                        <ListItemText primary={comment.content} />
+                      </ListItem>
+                    ))}
+                  </>
+                )}
+              </List>
             </Paper>
           </Grid>
         </Grid>
@@ -162,7 +232,20 @@ export default function VideoPage() {
 
       {/* RECOMMEND */}
       <Grid className='hidden p-8 sm:block' item xs={4}>
-        <MyChannelVideo />
+        <Grid container spacing={3} direction='column'>
+          {videoList?.map((item: VideoModel) => (
+            <VideoCard
+              loading={isLoading}
+              img={item.cover}
+              key={item._id}
+              id={item._id}
+              title={item.title}
+              auth={item.user.username}
+              desc={item.description}
+              date={item.updatedAt}
+            />
+          ))}
+        </Grid>
       </Grid>
     </Grid>
   )

@@ -29,7 +29,7 @@ export default function Profile() {
 
   // 跳转到个人信息页
   const handleToInformation = () => {
-    navigate('/information')
+    navigate('/userinfo')
   }
 
   // 获取个人用户信息

@@ -36,3 +36,15 @@ export type VideoListRes = {
   videos: VideoRes[]
   videosCount: number
 }
+
+export type AddCommentRes = {
+  _id: string
+  content: string
+  video: VideoModel
+  user: User
+}
+
+export type CommentRes = {
+  comments: AddCommentRes[]
+  commentsCount: number
+}
