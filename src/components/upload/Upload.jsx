@@ -32,7 +32,7 @@ export default function Upload() {
   })
 
   useEffect(() => {
-    if (form.title && form.descriptio) {
+    if (form.title && form.description) {
       setCanUpload(true)
     }
   }, [form])
