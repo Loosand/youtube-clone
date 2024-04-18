@@ -36,7 +36,7 @@ export default function ProfileCard({
         alt='Header Background'
         image={user.cover || '/src/assets/avatar.png'}
       />
-      <Box className='mt-8 flex items-center gap-8'>
+      <Box className='mt-8 flex cursor-pointer items-center gap-8'>
         {loading ? (
           <Skeleton
             animation='wave'

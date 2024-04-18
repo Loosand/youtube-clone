@@ -32,7 +32,7 @@ export default function Login() {
   const [form, setForm] = useState<Form>({
     email,
     password,
-    remember: false,
+    remember: true,
   })
 
   const handleChange = (e) => {
@@ -56,7 +56,7 @@ export default function Login() {
       localStorage.setItem('userinfo', JSON.stringify(res.data))
       navigator('/')
     } catch (error) {
-      setLoading(true)
+      setLoading(false)
       setToast(error.response.data.error, 'error')
     }
   }

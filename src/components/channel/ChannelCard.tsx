@@ -6,14 +6,11 @@ import {
   CardContent,
   Typography,
   Skeleton,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
 } from '@mui/material'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+
+import CusDialog from '../common/CusDialog'
 
 import { User } from '@/types/user'
 
@@ -129,16 +126,13 @@ export default function ChannelCard({
         </CardContent>
       </Card>
 
-      <Dialog open={open} onClose={handleCancelUnsubscribe}>
-        <DialogTitle>确认取消订阅</DialogTitle>
-        <DialogContent>
-          <DialogContentText>确定要取消订阅吗？</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCancelUnsubscribe}>取消</Button>
-          <Button onClick={handleConfirmUnsubscribe}>确定</Button>
-        </DialogActions>
-      </Dialog>
+      <CusDialog
+        title='确认取消订阅'
+        content='确定要取消订阅该频道吗？'
+        open={open}
+        onClose={handleCancelUnsubscribe}
+        onConfirm={handleConfirmUnsubscribe}
+      />
     </Box>
   )
 }

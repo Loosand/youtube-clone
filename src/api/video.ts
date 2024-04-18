@@ -30,6 +30,13 @@ export const getVideoAPI = (videoId: string) => {
   })
 }
 
+export const deleteVideoAPI = (videoId: string) => {
+  return request({
+    url: `/videos/${videoId}`,
+    method: 'DELETE',
+  })
+}
+
 // 获取我的视频列表
 export const getMyVideosAPI = (pageNum: number, pageSize: number = 8) => {
   return request<VideoListRes>({

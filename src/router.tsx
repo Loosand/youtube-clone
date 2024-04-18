@@ -21,26 +21,48 @@ export default function Router() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route
-          element={
-            <Guard>
-              <Layout />
-            </Guard>
-          }>
+        <Route element={<Layout />}>
           <Route index element={<Home />} />
 
           <Route path=':userId' element={<Channel />}>
-            {/* <Route index element={<ChannelHome />} /> */}
             <Route index element={<ChannelVideo />} />
             <Route path='dynamic' element={<ChannelDynamic />} />
           </Route>
 
-          <Route path='subchannel' element={<SubChannel />} />
-          <Route path='subvideo' element={<SubVideo />} />
-          <Route path='userinfo' element={<UserInfo />} />
+          <Route
+            path='subchannel'
+            element={
+              <Guard>
+                <SubChannel />
+              </Guard>
+            }
+          />
+          <Route
+            path='subvideo'
+            element={
+              <Guard>
+                <SubVideo />
+              </Guard>
+            }
+          />
+          <Route
+            path='userinfo'
+            element={
+              <Guard>
+                <UserInfo />
+              </Guard>
+            }
+          />
         </Route>
 
-        <Route path='chat' element={<Chat />} />
+        <Route
+          path='chat'
+          element={
+            <Guard>
+              <Chat />
+            </Guard>
+          }
+        />
         <Route path='video/:videoId' element={<VideoPage />} />
         <Route path='login' element={<Login />} />
         <Route path='register' element={<Register />} />

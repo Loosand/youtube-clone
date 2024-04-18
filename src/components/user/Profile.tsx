@@ -4,15 +4,18 @@ import { useNavigate } from 'react-router-dom'
 
 import { getProfileAPI } from '@/api/user'
 import { useStore } from '@/store'
+import { getToken } from '@/utils'
 
 export default function Profile() {
   const { username, avatar, setUsername, setAvatar, setUserId, clearUserInfo } =
     useStore()
   const navigate = useNavigate()
+  const isLogin = getToken()
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    if (!isLogin) navigate('/login')
     setAnchorEl(event.currentTarget)
   }
 
@@ -34,6 +37,8 @@ export default function Profile() {
 
   // 获取个人用户信息
   useEffect(() => {
+    if (!isLogin) return
+
     getProfileAPI().then((res) => {
       setUsername(res.data.username)
       setUserId(res.data.id)
@@ -52,7 +57,7 @@ export default function Profile() {
         onClick={handleClick}>
         <Chip
           avatar={<Avatar alt='Photo' src={avatar} />}
-          label={username || 'Loading...'}
+          label={isLogin ? username || 'Loading...' : '未登录'}
           variant='filled'
           color='primary'
         />

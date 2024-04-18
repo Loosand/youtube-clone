@@ -25,6 +25,7 @@ import FlatMenu from './FlatMenu'
 import { Profile, Toast, DarkModeToggle } from '@/components'
 import UploadDialog from '@/pages/UploadDialog'
 import { useStore } from '@/store'
+import { getToken } from '@/utils'
 
 const drawerWidth = 240
 
@@ -77,11 +78,13 @@ const Drawer = styled(MuiDrawer, {
 }))
 
 export default function Dashboard() {
+  const isLogin = getToken()
   const navigate = useNavigate()
   const [open, setOpen] = useState(true)
   const { setUploadState } = useStore()
 
   const handleUploadOpen = () => {
+    if (!isLogin) navigate('/login')
     setUploadState(true)
   }
 

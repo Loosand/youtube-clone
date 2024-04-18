@@ -8,9 +8,10 @@ export { default as ChatInput } from './chat/ChatInput'
 export { default as Contacts } from './chat/Contacts'
 export { default as Welcome } from './chat/Welcome.jsx'
 
-export { default as CommentCard } from './comment/CommentCard'
+export { default as CommentItem } from './comment/CommentItem'
 export { default as CommentList } from './comment/CommentList'
 
+export { default as CusDialog } from './common/CusDialog.js'
 export { default as DarkModeToggle } from './common/DarkModeToggle'
 export { default as Empty } from './common/Empty'
 export { default as Guard } from './common/Guard'
