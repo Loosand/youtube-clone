@@ -18,20 +18,18 @@ import { getRandomVideosAPI, getVideoAPI } from '@/api/video'
 import { getVideoPlayAuthAPI } from '@/api/vod'
 import { VideoCard } from '@/components'
 import { useStore } from '@/store'
-import { VideoUserRes } from '@/types/user'
-import { type VideoModel } from '@/types/video'
 
-declare global {
-  interface Window {
-    Aliplayer: unknown
-  }
-}
+// declare global {
+//   interface Window {
+//     Aliplayer: unknown
+//   }
+// }
 
 export default function VideoPage() {
   const navigate = useNavigate()
   const { videoId } = useParams()
   const { userId, setToast } = useStore()
-  const [video, setVideo] = useState<VideoModel & { user: VideoUserRes }>(null)
+  const [video, setVideo] = useState(null)
   const [isSubscribed, setIsSubscribed] = useState(false)
   const [comment, setComment] = useState('')
   const [comments, setComments] = useState([])
@@ -58,7 +56,7 @@ export default function VideoPage() {
     fetchVideo(videoId)
   }, [videoId, isSubscribed])
 
-  const fetchPlayVideo = async (vodVideoId: string) => {
+  const fetchPlayVideo = async (vodVideoId) => {
     const data = await getVideoPlayAuthAPI(vodVideoId)
     createPlayer(data)
   }
@@ -71,7 +69,7 @@ export default function VideoPage() {
   }, [video])
 
   const createPlayer = (data) => {
-    let onReady: (value: unknown) => void
+    let onReady
     const p = new Promise((resolve) => {
       onReady = resolve
     })
@@ -233,7 +231,7 @@ export default function VideoPage() {
       {/* RECOMMEND */}
       <Grid className='hidden p-8 sm:block' item xs={4}>
         <Grid container spacing={3} direction='column'>
-          {videoList?.map((item: VideoModel) => (
+          {videoList?.map((item) => (
             <VideoCard
               loading={isLoading}
               img={item.cover}

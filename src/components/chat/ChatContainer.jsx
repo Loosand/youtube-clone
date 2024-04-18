@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useQuery } from "react-query"
 import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
 
@@ -10,9 +11,6 @@ export default function ChatContainer({ currentChat, socket }) {
   const [messages, setMessages] = useState([]);
   const [arrivalMessage, setArrivalMessage] = useState(null);
 
-  useEffect(() => {
-    fetchData();
-  }, [currentChat]);
 
   const fetchData = async () => {
     try {
@@ -24,12 +22,14 @@ export default function ChatContainer({ currentChat, socket }) {
       });
 
       setMessages(res);
-      console.log(res);
-
     } catch (error) {
       console.error("Error fetching messages:", error);
     }
   };
+
+  useQuery(['chat-message', currentChat], () => fetchData(), {
+    refetchInterval: 500
+  })
 
 
   useEffect(() => {

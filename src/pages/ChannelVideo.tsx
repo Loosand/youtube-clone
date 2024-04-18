@@ -7,26 +7,24 @@ import { getUserVideosAPI } from '@/api/video'
 import { VideoList, Loading, Empty } from '@/components'
 
 export default function ChannelVideo() {
-  const [videoCount, setVideoCount] = useState(null)
-  const [page, setPage] = useState(1)
   const { userId } = useParams()
-  const pageSize = 8
-  let pageCount: number
-  videoCount ? (pageCount = Math.ceil(videoCount / pageSize)) : (pageCount = 1)
+  const [pageNum, setPageNum] = useState(1)
+  const [pageCount, setPageCount] = useState(1)
 
   const {
     data: videoList,
     isLoading,
     isFetching,
   } = useQuery(
-    ['my-videos', page, userId],
+    ['my-videos', pageNum, userId],
     async () => {
       const res = await getUserVideosAPI(userId, {
-        pageNum: page,
-        pageSize,
+        pageNum: pageNum,
+        pageSize: 8,
       })
 
-      setVideoCount(res.data.videosCount)
+      setPageCount(Math.ceil(res.data.videosCount / 8))
+
       return res.data.videos
     },
     {
@@ -38,7 +36,7 @@ export default function ChannelVideo() {
   )
 
   const onHandleChange = (value: number) => {
-    setPage(value)
+    setPageNum(value)
   }
 
   if (isLoading) {
@@ -57,7 +55,7 @@ export default function ChannelVideo() {
         {Boolean(videoList.length === 0) || (
           <Pagination
             count={pageCount}
-            page={page}
+            page={pageNum}
             size='large'
             onChange={(_e, value) => onHandleChange(value)}
           />
