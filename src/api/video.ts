@@ -30,6 +30,7 @@ export const getVideoAPI = (videoId: string) => {
   })
 }
 
+// 删除视频
 export const deleteVideoAPI = (videoId: string) => {
   return request({
     url: `/videos/${videoId}`,
@@ -78,6 +79,7 @@ export const getRandomVideosAPI = () => {
   })
 }
 
+// 添加评论
 export const addCommentAPI = (videoId: string, data: { content: string }) => {
   return request<AddCommentRes>({
     url: `/videos/${videoId}/comments`,
@@ -86,6 +88,7 @@ export const addCommentAPI = (videoId: string, data: { content: string }) => {
   })
 }
 
+// 获取评论
 export const getCommentAPI = (
   videoId: string,
   params: { pageNum?: number; pageSize?: 8 },
@@ -97,9 +100,47 @@ export const getCommentAPI = (
   })
 }
 
+// 删除评论
 export const deleteCommentAPI = (videoId: string, commentId: string) => {
   return request({
     url: `/videos/${videoId}/comments/${commentId}`,
     method: 'DELETE',
+  })
+}
+
+// 收藏视频
+export const collectVideoAPI = (videoId: string) => {
+  return request({
+    url: `/videos/${videoId}/like`,
+    method: 'POST',
+  })
+}
+
+// 取消收藏视频
+export const cancelCollectVideoAPI = (videoId: string) => {
+  return request({
+    url: `/videos/${videoId}/dislike`,
+    method: 'POST',
+  })
+}
+
+// 获取我收藏的视频列表
+export const getCollectVideosAPI = (pageNum: number, pageSize: number = 8) => {
+  return request<VideoListRes>({
+    url: `/user/videos/liked`,
+    method: 'GET',
+    params: { pageNum, pageSize },
+  })
+}
+
+// 获取用户收藏的视频列表
+export const getUserCollectVideosAPI = (
+  userId: string,
+  params: { pageNum: number; pageSize: 8 },
+) => {
+  return request<VideoListRes>({
+    url: `${userId}/liked`,
+    method: 'GET',
+    params,
   })
 }

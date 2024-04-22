@@ -1,16 +1,25 @@
+import { useMediaQuery } from "@mui/material";
 import React, { useState, useEffect, useRef } from "react";
 import { useQuery } from "react-query"
-import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
+
 
 import { getMessageAPI, sendMessageAPI } from "@/api/chat"
 import { ChatInput } from "@/components";
+import { useStore } from "@/store";
 
 export default function ChatContainer({ currentChat, socket }) {
   const scrollRef = useRef()
+  const { avatar } = useStore()
   const [messages, setMessages] = useState([]);
   const [arrivalMessage, setArrivalMessage] = useState(null);
+  const chatContainerRef = useRef(null);
+  const isMobile = useMediaQuery('(max-width:768px)')
 
+  // 模拟加载时 messages 的变化，触发滚动到底部效果
+  useEffect(() => {
+    chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+  }, [messages]);
 
   const fetchData = async () => {
     try {
@@ -31,7 +40,6 @@ export default function ChatContainer({ currentChat, socket }) {
     refetchInterval: 500
   })
 
-
   useEffect(() => {
     getCurrentChat();
   }, [currentChat]);
@@ -49,11 +57,11 @@ export default function ChatContainer({ currentChat, socket }) {
       localStorage.getItem("userinfo")
     );
 
-    socket.current.emit("send-msg", {
-      to: currentChat?._id,
-      from: userInfo.id,
-      msg,
-    });
+    // socket.current.emit("send-msg", {
+    //   to: currentChat?._id,
+    //   from: userInfo.id,
+    //   msg,
+    // });
 
     await sendMessageAPI({
       from: userInfo.id,
@@ -64,18 +72,19 @@ export default function ChatContainer({ currentChat, socket }) {
     const msgs = [...messages];
     msgs.push({ fromSelf: true, message: msg });
     setMessages(msgs);
+
   }
 
-  useEffect(() => {
-    if (socket.current) {
-      socket.current.on("msg-recieve", (msg) => {
-        setArrivalMessage({
-          fromSelf: false,
-          message: msg
-        })
-      })
-    }
-  }, [])
+  // useEffect(() => {
+  //   if (socket.current) {
+  //     socket.current.on("msg-recieve", (msg) => {
+  //       setArrivalMessage({
+  //         fromSelf: false,
+  //         message: msg
+  //       })
+  //     })
+  //   }
+  // }, [])
 
   useEffect(() => {
     arrivalMessage && setMessages((prev) => [...prev, arrivalMessage])
@@ -88,28 +97,29 @@ export default function ChatContainer({ currentChat, socket }) {
   }, [messages])
 
   return (
-    <Container>
-      <div className="chat-header">
-        <div className="user-details">
-          <div className="avatar">
-            <img
-              src={`${currentChat?.avatar}`}
-            />
-          </div>
-          <div className="username">
+    <div className="flex-1 bg-gray-200 text-black flex flex-col overflow-hidden">
+      {!isMobile && <div className="flex justify-between bg-white items-center px-8 py-3">
+        <div className="flex items-center gap-4">
+          <img
+            className="h-12 rounded-full"
+            src={`${currentChat?.avatar}`}
+          />
+          <div >
             <h3>{currentChat?.username}</h3>
           </div>
         </div>
-      </div>
+      </div>}
 
-      <div className="chat-messages">
+      <div ref={chatContainerRef} className="p-4 flex-1 space-y-4 overflow-auto">
         {messages?.map((message) => {
           return (
             <div div={scrollRef} key={uuidv4()}>
-              <div className={`message ${message.fromSelf ? "sended" : "recieved"}`}>
-                <div className="content ">
+              <div className={`flex gap-4 items-center ${message.fromSelf ? "justify-end" : "justify-start"}`}>
+                {!message.fromSelf && (<img className="h-12 w-12 rounded-full" src={currentChat.avatar} />)}
+                <div className="bg-purple-500 max-w-[40%] break-words p-4 text-xl rounded-2xl text-slate-200">
                   <p>{message.message}</p>
                 </div>
+                {message.fromSelf && (<img className="h-12 w-12 rounded-full" src={avatar} />)}
               </div>
             </div>
           );
@@ -117,86 +127,6 @@ export default function ChatContainer({ currentChat, socket }) {
       </div>
 
       <ChatInput handleSendMsg={handleSendMsg} />
-    </Container >
+    </div >
   );
 }
-
-
-const Container = styled.div`
-  display: grid;
-  grid-template-rows: 10% 80% 10%;
-  gap: 0.1rem;
-  overflow: hidden;
-  @media screen and (min-width: 720px) and (max-width: 1080px) {
-    grid-template-rows: 15% 70% 15%;
-  }
-  .chat-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 2rem;
-    background-color: cornflowerblue;
-    .user-details {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      .avatar {
-        img {
-          height: 3rem;
-        }
-      }
-      .username {
-        h3 {
-          color: white;
-        }
-      }
-    }
-  }
-  .chat-messages {
-    padding: 1rem 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    overflow: auto;
-    &::-webkit-scrollbar {
-      width: 0.2rem;
-      &-thumb {
-        background-color: #ffffff39;
-        width: 0.1rem;
-        border-radius: 1rem;
-      }
-    }
-    .message {
-      display: flex;
-      align-items: center;
-      .content {
-        max-width: 40%;
-        overflow-wrap: break-word;
-        padding: 1rem;
-        font-size: 1.1rem;
-        border-radius: 1rem;
-        color: #d1d1d1;
-        @media screen and (min-width: 720px) and (max-width: 1080px) {
-          max-width: 70%;
-        }
-      }
-    }
-    .sended {
-      justify-content: flex-end;
-      .content {
-        background-color: #4f04ff21;
-      }
-    }
-    .recieved {
-      justify-content: flex-start;
-      .content {
-        background-color: #9900ff20;
-      }
-    }
-  }
-`;
-
-
-
-
-

@@ -14,6 +14,7 @@ function CommentItem({
   canDelete = false,
   onDelete,
 }: {
+  userId: string
   userAvatar: string
   userName: string
   comment: string
@@ -37,7 +38,9 @@ function CommentItem({
   }
 
   return (
-    <Paper elevation={3} className='mb-4 cursor-pointer p-8'>
+    <Paper
+      elevation={3}
+      className='mb-4 cursor-pointer p-8 dark:bg-gray-800 dark:text-white'>
       <Grid container wrap='nowrap' className='items-center' spacing={2}>
         <Grid item>
           <Avatar

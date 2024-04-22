@@ -4,6 +4,7 @@ import {
   Home as HomeIcon,
   AccountCircle as AccountCircleIcon,
   LocalMovies as LocalMoviesIcon,
+  StarRate as StarRateIcon,
 } from '@mui/icons-material'
 import {
   ListItemButton,
@@ -45,6 +46,12 @@ export default function FlatMenu({ menuOpen }) {
       text: '你的频道',
       path: userId,
       icon: <LocalMoviesIcon />,
+      last: false,
+    },
+    {
+      text: '收藏列表',
+      path: 'mycollect',
+      icon: <StarRateIcon />,
       last: true,
     },
     {
@@ -109,7 +116,7 @@ function ItemMenu({ last, item, currentRoute, menuOpen }) {
       </ListItemButton>
       {last && (
         <div className='py-4'>
-          <Divider className='dark:border-[0.5px] dark:border-white' />
+          <Divider className='dark:border-[0.5px] dark:border-gray-700' />
         </div>
       )}
     </Link>

@@ -7,6 +7,7 @@ import {
   Skeleton,
   Typography,
   Box,
+  useMediaQuery,
 } from '@mui/material'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
@@ -21,6 +22,7 @@ type VideoCardProps = {
   desc: string
   auth: string
   date: string
+  className?: string
 }
 
 export default function VideoCard({
@@ -31,6 +33,7 @@ export default function VideoCard({
   desc,
   auth,
   date,
+  className,
 }: VideoCardProps) {
   const navigate = useNavigate()
   dayjs.extend(relativeTime)
@@ -38,6 +41,8 @@ export default function VideoCard({
   const handleGoVideoDetail = () => {
     navigate(`/video/${id}`)
   }
+
+  const isMobile = useMediaQuery('(max-width:768px)')
 
   // 发布时间
   function formatTimeDifference(timestamp) {
@@ -58,6 +63,7 @@ export default function VideoCard({
   return (
     <Grid item sm={12} md={6} lg={3}>
       <Card
+        className={className}
         onClick={handleGoVideoDetail}
         elevation={3}
         sx={{
@@ -66,7 +72,8 @@ export default function VideoCard({
         <CardActionArea>
           {loading ? (
             <Skeleton
-              sx={{ height: 140 }}
+              className='dark:bg-gray-600'
+              sx={{ height: 140, width: '100%' }}
               animation='wave'
               variant='rectangular'
             />
@@ -79,9 +86,10 @@ export default function VideoCard({
             />
           )}
 
-          <CardContent>
+          <CardContent className='dark:bg-gray-900 dark:text-white'>
             {loading ? (
               <Skeleton
+                className='dark:bg-gray-600'
                 animation='wave'
                 height={10}
                 width='100%'
@@ -93,8 +101,8 @@ export default function VideoCard({
                   fontSize: 14,
                   width: '100%',
                   textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
                   overflow: 'hidden',
+                  whiteSpace: isMobile ? 'normal' : 'nowrap',
                 }}
                 gutterBottom
                 fontWeight={'semibold'}
@@ -104,22 +112,24 @@ export default function VideoCard({
               </Typography>
             )}
 
-            <Box className='flex justify-between'>
+            <Box className='flex justify-between dark:text-white'>
               {loading ? (
                 <Skeleton
+                  className='dark:bg-gray-600'
                   animation='wave'
                   height={10}
                   width='15%'
                   style={{ marginBottom: 6 }}
                 />
               ) : (
-                <Typography gutterBottom component='span'>
+                <Typography variant='h6' gutterBottom component='span'>
                   {auth}
                 </Typography>
               )}
 
               {loading ? (
                 <Skeleton
+                  className='dark:bg-gray-600'
                   animation='wave'
                   height={10}
                   width='15%'
@@ -134,6 +144,7 @@ export default function VideoCard({
 
             {loading ? (
               <Skeleton
+                className='dark:bg-gray-600'
                 animation='wave'
                 height={10}
                 width='100%'
@@ -147,8 +158,7 @@ export default function VideoCard({
                   whiteSpace: 'nowrap',
                   overflow: 'hidden',
                 }}
-                variant='body2'
-                color='text.secondary'>
+                variant='body2'>
                 {desc}
               </Typography>
             )}

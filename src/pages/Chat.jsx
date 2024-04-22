@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { io } from 'socket.io-client'
-import styled from 'styled-components'
+// import { io } from 'socket.io-client'
 
 import { getAllUsersAPI } from '@/api/user'
-import { ChatContainer, Welcome, Contacts } from '@/components'
+import { ChatContainer, Contacts } from '@/components'
 
 export default function Chat() {
   const socket = useRef()
@@ -11,13 +10,13 @@ export default function Chat() {
   const [currentChat, setCurrentChat] = useState()
   const currentUser = JSON.parse(localStorage.getItem('userinfo'))
 
-  useEffect(() => {
-    if (currentUser) {
-      socket.current = io('http://localhost:7001')
-      console.log(socket.current);
-      socket.current.emit('add-user', currentUser.id)
-    }
-  }, [currentUser])
+  // useEffect(() => {
+  //   if (currentUser) {
+  //     socket.current = io('http://localhost:7001')
+  //     console.log(socket.current);
+  //     socket.current.emit('add-user', currentUser.id)
+  //   }
+  // }, [currentUser])
 
   useEffect(() => {
     if (currentUser) {
@@ -40,38 +39,17 @@ export default function Chat() {
 
   return (
     <>
-      <Container>
-        <div className='container'>
+      <div className='md:p-20 bg-gray-800'>
+        <div className='flex justify-between h-svh md:h-[90vh] bg-gray-600'>
           <Contacts contacts={contacts} changeChat={handleChatChange} />
 
           {currentChat === undefined ? (
-            <Welcome />
+            <div className='flex-1 flex justify-center items-center text-2xl text-gray-300'>请选择聊天对象</div>
           ) : (
             <ChatContainer currentChat={currentChat} socket={socket} />
           )}
         </div>
-      </Container>
+      </div>
     </>
   )
 }
-
-const Container = styled.div`
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 1rem;
-  align-items: center;
-  background-color: skyblue;
-  .container {
-    height: 85vh;
-    width: 85vw;
-    background-color: #00000076;
-    display: grid;
-    grid-template-columns: 25% 75%;
-    @media screen and (min-width: 720px) and (max-width: 1080px) {
-      grid-template-columns: 35% 65%;
-    }
-  }
-`

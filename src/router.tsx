@@ -3,10 +3,10 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Guard from './components/common/Guard'
 import Layout from './layout/Dashboard'
 import Channel from './pages/Channel'
-import ChannelDynamic from './pages/ChannelDynamic'
-// import ChannelHome from './pages/ChannelHome'
+import ChanelCollect from './pages/ChannelCollect'
 import ChannelVideo from './pages/ChannelVideo'
 import Chat from './pages/Chat'
+import Collect from './pages/Collect'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import SubChannel from './pages/SubChannel'
@@ -23,20 +23,6 @@ export default function Router() {
       <Routes>
         <Route element={<Layout />}>
           <Route index element={<Home />} />
-
-          <Route path=':userId' element={<Channel />}>
-            <Route index element={<ChannelVideo />} />
-            <Route path='dynamic' element={<ChannelDynamic />} />
-          </Route>
-
-          <Route
-            path='subchannel'
-            element={
-              <Guard>
-                <SubChannel />
-              </Guard>
-            }
-          />
           <Route
             path='subvideo'
             element={
@@ -45,6 +31,29 @@ export default function Router() {
               </Guard>
             }
           />
+          <Route
+            path='subchannel'
+            element={
+              <Guard>
+                <SubChannel />
+              </Guard>
+            }
+          />
+
+          <Route path=':userId' element={<Channel />}>
+            <Route index element={<ChannelVideo />} />
+            <Route path='collect' element={<ChanelCollect />} />
+          </Route>
+
+          <Route
+            path='mycollect'
+            element={
+              <Guard>
+                <Collect />{' '}
+              </Guard>
+            }
+          />
+
           <Route
             path='userinfo'
             element={

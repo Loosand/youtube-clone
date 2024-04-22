@@ -28,7 +28,7 @@ export default function NavBar({ menu }: NavBarProps) {
         aria-label='basic tabs example'>
         {/* <Tab onClick={() => handleChangeRoute(menu[0])} label='首页' /> */}
         <Tab onClick={() => handleChangeRoute(menu[0])} label='视频' />
-        <Tab onClick={() => handleChangeRoute(menu[1])} label='动态' />
+        <Tab onClick={() => handleChangeRoute(menu[1])} label='收藏列表' />
       </Tabs>
     </Box>
   )

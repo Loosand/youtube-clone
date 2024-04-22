@@ -16,8 +16,9 @@ import {
   AppBar as MuiAppBar,
   AppBarProps as MuiAppBarProps,
 } from '@mui/material'
+import { useMediaQuery } from '@mui/material'
 import { styled, Breakpoint } from '@mui/material/styles'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
 
 import FlatMenu from './FlatMenu'
@@ -83,6 +84,16 @@ export default function Dashboard() {
   const [open, setOpen] = useState(true)
   const { setUploadState } = useStore()
 
+  const isMobile = useMediaQuery('(max-width:768px)')
+
+  useEffect(() => {
+    if (isMobile) {
+      setOpen(false)
+    } else {
+      setOpen(true)
+    }
+  }, [isMobile])
+
   const handleUploadOpen = () => {
     if (!isLogin) navigate('/login')
     setUploadState(true)
@@ -121,13 +132,12 @@ export default function Dashboard() {
               variant='h5'
               noWrap
               component='div'>
-              Youtube
+              {isLogin ? '' : 'Youtube'}
             </Typography>
 
             <IconButton onClick={handleUploadOpen} size='large' color='inherit'>
               <VideoCallIcon />
             </IconButton>
-
             <IconButton
               onClick={() => {
                 navigate('/chat')
@@ -138,9 +148,7 @@ export default function Dashboard() {
                 <NotificationsIcon />
               </Badge>
             </IconButton>
-
             <DarkModeToggle />
-
             <Profile />
           </Toolbar>
         </AppBar>
@@ -148,12 +156,11 @@ export default function Dashboard() {
         {/* Sider */}
         <Drawer variant='permanent' open={open}>
           <Toolbar className='flex items-center justify-end px-2 dark:bg-gray-500'>
-            <DarkModeToggle />
-
             <IconButton onClick={toggleDrawer}>
               <ChevronLeftIcon />
             </IconButton>
           </Toolbar>
+
           {/* <Divider /> */}
           <FlatMenu menuOpen={open} />
         </Drawer>

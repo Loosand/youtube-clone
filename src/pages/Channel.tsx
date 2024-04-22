@@ -7,7 +7,7 @@ import { getChannelInfoAPI, subscribeAPI, unsubscribeAPI } from '@/api/channel'
 import { NavBar, Loading, ProfileCard } from '@/components'
 import useCheckIsSelf from '@/hooks/useCheckIsSelf'
 
-const MENU = ['', 'dynamic']
+const MENU = ['', 'collect']
 
 export default function Channel() {
   const { userId } = useParams()

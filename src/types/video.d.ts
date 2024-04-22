@@ -33,7 +33,7 @@ export type CreateVideoRes = {
 }
 
 export type VideoListRes = {
-  videos: VideoRes[]
+  videos: VideoModel[]
   videosCount: number
 }
 
