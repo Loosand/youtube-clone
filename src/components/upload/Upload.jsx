@@ -26,7 +26,7 @@ export default function Upload() {
   const videoURL = useCallback(URL.createObjectURL(selectedFile), [])
 
   const [form, setForm] = useState({
-    title: selectedFile?.name,
+    title: selectedFile?.name.split('.')[0] || '',
     description: '',
     vodVideoId: '',
   })

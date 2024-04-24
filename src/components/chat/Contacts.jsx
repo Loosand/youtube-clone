@@ -20,7 +20,7 @@ export default function Contacts({ contacts, changeChat }) {
               <ListItem
                 key={index}
                 onClick={() => changeCurrentChat(index, contact)}
-                className={"bg-gray-800 text-white " + (index === currentSelected && 'bg-white text-black')}
+                className={index === currentSelected ? 'bg-white text-black' : 'text-white'}
               >
                 <ListItemAvatar>
                   <Avatar src={contact.avatar} className="h-10 w-10 rounded-full overflow-hidden" />

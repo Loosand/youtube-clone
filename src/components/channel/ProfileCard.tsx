@@ -34,7 +34,10 @@ export default function ProfileCard({
         }}
         component='img'
         alt='Header Background'
-        image={user.cover || '/src/assets/avatar.png'}
+        image={
+          user.cover ||
+          'https://loosand-picture.oss-cn-hangzhou.aliyuncs.com/youtube/default_bgimg'
+        }
       />
       <Box className='mt-8 flex cursor-pointer items-center gap-8'>
         {loading ? (
